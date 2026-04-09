@@ -1,28 +1,32 @@
 async function cekValidasi() {
     const bank = document.getElementById('bank').value;
     const account = document.getElementById('account').value;
-    
-    // UI Loading...
-    document.getElementById('btnCek').classList.add('hidden');
-    document.getElementById('loading').classList.remove('hidden');
+    const btn = document.getElementById('btnCek');
+    const loader = document.getElementById('loading');
+    const result = document.getElementById('result');
+
+    if(!account) return alert("Nomor rekening wajib diisi!");
+
+    btn.classList.add('hidden');
+    loader.classList.remove('hidden');
+    result.classList.add('hidden');
 
     try {
-        // PANGGIL BACKEND VERCEL KAMU SENDIRI
-        // Bukan panggil api.co.id secara langsung
+        // MANGGIL BACKEND VERCEL KAMU SENDIRI
         const response = await fetch(`/api/check?bank=${bank}&account=${account}`);
-        const result = await response.json();
+        const data = await response.json();
 
-        if (result.success) {
-            document.getElementById('owner').innerText = result.nama;
-            document.getElementById('aiTip').innerText = "AI Security: " + result.aiText;
-            document.getElementById('result').classList.remove('hidden');
+        if (data.success) {
+            document.getElementById('owner').innerText = data.nama;
+            document.getElementById('aiTip').innerText = "AI Security: " + data.aiText;
+            result.classList.remove('hidden');
         } else {
-            alert("Data tidak ditemukan!");
+            alert("Gagal: " + (data.message || "Rekening tidak ditemukan."));
         }
-    } catch (err) {
-        alert("Terjadi kesalahan sistem.");
+    } catch (error) {
+        alert("Terjadi kesalahan sistem. Coba lagi.");
     } finally {
-        document.getElementById('btnCek').classList.remove('hidden');
-        document.getElementById('loading').classList.add('hidden');
+        btn.classList.remove('hidden');
+        loader.classList.add('hidden');
     }
 }
