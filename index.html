@@ -59,4 +59,70 @@
             <!-- Result Box -->
             <div id="result" class="hidden mt-8 p-6 rounded-2xl bg-blue-50 border border-blue-100">
                 <div class="text-center">
-                    <
+                    <p class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-1">Nama Pemilik Rekening</p>
+                    <h2 id="ownerName" class="text-2xl font-black text-slate-800 uppercase"></h2>
+                    <div id="aiAnalysis" class="mt-4 pt-4 border-t border-blue-200 text-sm text-blue-700 italic leading-relaxed">
+                        <!-- AI Tips dari Gemini -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-8 text-slate-400 text-xs font-medium uppercase tracking-widest">
+            Powered by Premium API.CO.ID & Gemini
+        </div>
+    </div>
+
+    <script>
+        // MASUKKAN KEY KAMU DI SINI
+        const COID_KEY = "xy9sQ9AcQwFZcNeiSTSrwZoEDGh9dsdW7e8IJ2GqAlgsb72oqX";
+        const GEMINI_KEY = "AIzaSyDoC3xsK5VY8lLKlWgGkCKW7rooQvylORo";
+
+        async function cekSekarang() {
+            const bank = document.getElementById('bank').value;
+            const account = document.getElementById('account').value;
+            const btn = document.getElementById('btnCek');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+
+            if(!account) return alert("Nomor rekening wajib diisi!");
+
+            // UI Reset
+            btn.classList.add('hidden');
+            loading.classList.remove('hidden');
+            result.classList.add('hidden');
+
+            try {
+                // 1. Cek Rekening ke api.co.id
+                const response = await fetch(`https://api.co.id/v1/bank/check?bank=${bank}&account=${account}`, {
+                    headers: { 'Authorization': `Bearer ${COID_KEY}` }
+                });
+                const resData = await response.json();
+
+                if (resData.status === "success" || resData.status === 200) {
+                    const nama = resData.data.name;
+                    document.getElementById('ownerName').innerText = nama;
+
+                    // 2. Tanya Gemini AI untuk tips keamanan
+                    const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_KEY}`, {
+                        method: 'POST',
+                        body: JSON.stringify({ contents: [{ parts: [{ text: `Berikan tips singkat keamanan transfer ke bank ${bank} atas nama ${nama}. Maksimal 15 kata.` }] }] })
+                    });
+                    const aiData = await aiResponse.json();
+                    const aiText = aiData.candidates[0].content.parts[0].text;
+                    
+                    document.getElementById('aiAnalysis').innerText = "AI Tips: " + aiText;
+                    result.classList.remove('hidden');
+                } else {
+                    alert("Data tidak ditemukan! Pastikan nomor rekening dan bank benar.");
+                }
+            } catch (error) {
+                alert("Gagal memproses data. Cek koneksi atau API Key kamu.");
+            } finally {
+                btn.classList.remove('hidden');
+                loading.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
