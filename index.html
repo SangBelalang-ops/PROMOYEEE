@@ -1,112 +1,65 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Validasi Rekening Premium</title>
+    <title>VALIDASI REKENING PREMIUM</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #121212; color: #eee; display: flex; justify-content: center; padding: 20px; }
-        .card { background: #1e1e1e; border: 1px solid #333; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: #007bff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #bbb; }
-        select, input, button { width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #333; box-sizing: border-box; font-size: 16px; background: #252525; color: #fff; }
-        button { background: #007bff; color: #fff; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #0056b3; transform: translateY(-2px); }
-        #result-box { text-align: center; padding: 20px; border-radius: 8px; background: #151515; border: 1px dashed #444; min-height: 60px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-        .nama-lengkap { color: #28a745; font-weight: 800; font-size: 22px; text-transform: uppercase; margin-top: 5px; }
-        .error { color: #dc3545; font-size: 14px; }
+        body { font-family: sans-serif; background: #111; color: #fff; display: flex; justify-content: center; padding-top: 50px; }
+        .box { background: #222; padding: 30px; border-radius: 10px; width: 350px; border: 1px solid #444; }
+        select, input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: none; font-size: 16px; }
+        button { background: #007bff; color: white; font-weight: bold; cursor: pointer; }
+        #output { margin-top: 20px; text-align: center; padding: 15px; background: #000; border-radius: 5px; }
+        .nama { color: #00ff00; font-size: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>VALIDASI REKENING PRO</h2>
-    
-    <label>Pilih Bank / E-Wallet (130+ Cabang)</label>
+<div class="box">
+    <h3 style="text-align:center">CEK REKENING INDONESIA</h3>
     <select id="bank">
-        <optgroup label="BANK NASIONAL">
-            <option value="bca">BCA</option>
-            <option value="mandiri">MANDIRI</option>
-            <option value="bri">BRI</option>
-            <option value="bni">BNI</option>
-            <option value="btn">BTN</option>
-            <option value="bsi">BSI (BANK SYARIAH INDONESIA)</option>
-        </optgroup>
-        <optgroup label="BANK DIGITAL & SWASTA">
-            <option value="seabank">SEABANK</option>
-            <option value="jago">BANK JAGO</option>
-            <option value="neo">BNC / NEO COMMERCE</option>
-            <option value="allo">ALLO BANK</option>
-            <option value="blu">BLU BY BCA</option>
-            <option value="danamon">DANAMON</option>
-            <option value="permata">PERMATA BANK</option>
-            <option value="cimb">CIMB NIAGA</option>
-            <option value="ocbc">OCBC NISP</option>
-            <option value="panin">PANIN BANK</option>
-            <option value="maybank">MAYBANK</option>
-            <option value="sinarmas">SINARMAS</option>
-        </optgroup>
-        <optgroup label="E-WALLET">
-            <option value="dana">DANA</option>
-            <option value="ovo">OVO</option>
-            <option value="gopay">GOPAY</option>
-            <option value="linkaja">LINKAJA</option>
-            <option value="shopeepay">SHOPEEPAY</option>
-        </optgroup>
-        <optgroup label="BANK DAERAH (BPD)">
-            <option value="bjb">BJB (JAWA BARAT)</option>
-            <option value="dki">BANK DKI</option>
-            <option value="jatim">BANK JATIM</option>
-            <option value="jateng">BANK JATENG</option>
-            <option value="sumut">BANK SUMUT</option>
-            <option value="papua">BANK PAPUA</option>
-            <option value="kalbar">BANK KALBAR</option>
-            <option value="sulselbar">BANK SULSELBAR</option>
-            </optgroup>
+        <option value="bca">BCA</option>
+        <option value="mandiri">MANDIRI</option>
+        <option value="bri">BRI</option>
+        <option value="bni">BNI</option>
+        <option value="seabank">SEABANK</option>
+        <option value="jago">BANK JAGO</option>
+        <option value="dana">DANA</option>
+        <option value="ovo">OVO</option>
     </select>
-
-    <label>Masukkan Nomor Rekening / HP</label>
-    <input type="text" id="norek" placeholder="Contoh: 7012345678" autocomplete="off">
-    
-    <button onclick="cekRekening()">VALIDASI SEKARANG</button>
-
-    <div id="result-box">Hasil muncul di sini...</div>
+    <input type="text" id="norek" placeholder="Nomor Rekening">
+    <button onclick="gasCek()">VALIDASI SEKARANG</button>
+    <div id="output">Hasil muncul di sini...</div>
 </div>
 
 <script>
-async function cekRekening() {
+async function gasCek() {
     const bank = document.getElementById('bank').value;
     const norek = document.getElementById('norek').value;
-    const box = document.getElementById('result-box');
+    const out = document.getElementById('output');
 
-    if(!norek) return alert("Nomor rekening nggak boleh kosong!");
+    if(!norek) return alert("Isi nomor rekening!");
 
-    box.innerHTML = "<span style='color:#007bff'>Menghubungkan ke Server Bank...</span>";
+    out.innerHTML = "Menghubungkan ke Bank...";
 
-    // KUNCI PREMIUM LO
+    // API KEY PREMIUM LO
     const KEY = "aFVBKbUGW15JPwN3to5L7DiyN0QY1syLI4p4jVQ5N0VnsgYHRs";
-    
-    // Gunakan Proxy untuk nembus blokir browser (CORS)
-    const TARGET_URL = `https://use.api.co.id/v1/bank/inquiry?bank_code=${bank}&account_number=${norek}`;
-    const PROXY = "https://api.allorigins.win/get?url=" + encodeURIComponent(TARGET_URL);
+    const URL = `https://use.api.co.id/v1/bank/inquiry?bank_code=${bank}&account_number=${norek}`;
 
     try {
-        const response = await fetch(PROXY);
-        const wrapper = await response.json();
-        
-        // Data asli dari api.co.id ada di field 'contents'
-        const data = JSON.parse(wrapper.contents);
+        const response = await fetch(URL, {
+            method: 'GET',
+            headers: { 'x-api-co-id': KEY }
+        });
 
-        if (data.status === "success" || data.success === true) {
-            // Karena lo PREMIUM, ini bakal keluar NAMA LENGKAP tanpa sensor
-            const nama = data.data.account_name || data.data.name;
-            box.innerHTML = `NAMA PEMILIK:<br><span class="nama-lengkap">${nama.toUpperCase()}</span>`;
+        const res = await response.json();
+
+        if(res.status === "success") {
+            // Karena Premium, ini HARUSNYA Nama Lengkap
+            out.innerHTML = `NAMA PEMILIK:<br><span class="nama">${res.data.account_name}</span>`;
         } else {
-            box.innerHTML = `<span class="error">GAGAL: ${data.message || "Data tidak ditemukan"}</span>`;
+            out.innerHTML = "GAGAL: " + res.message;
         }
-    } catch (error) {
-        box.innerHTML = "<span class='error'>SERVER ERROR!<br>Cek saldo atau API Key di dashboard.</span>";
-        console.error(error);
+    } catch (e) {
+        out.innerHTML = "<b style='color:red'>BROWSER MEMBLOKIR KONEKSI!</b><br><small>Solusi: Aktifkan Ekstensi 'Allow CORS' di Chrome atau upload file ini ke Hosting.</small>";
     }
 }
 </script>
