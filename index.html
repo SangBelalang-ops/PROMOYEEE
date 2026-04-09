@@ -2,105 +2,83 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Validasi Premium - ALL FINE</title>
+    <title>Sistem Validasi Rekening Pro - API.CO.ID</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0b0b0b; color: #fff; display: flex; justify-content: center; padding: 20px; }
-        .card { background: #161616; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; border: 1px solid #ff0000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); }
-        h2 { text-align: center; color: #ff0000; text-transform: uppercase; margin-bottom: 25px; border-bottom: 2px solid #333; padding-bottom: 10px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #aaa; }
-        select, input, button { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #333; background: #222; color: #fff; font-size: 16px; box-sizing: border-box; }
-        button { background: #ff0000; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0b0b0b; color: #fff; display: flex; justify-content: center; padding: 40px 20px; }
+        .card { background: #161616; padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; border: 1px solid #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.2); }
+        h2 { text-align: center; color: #ff0000; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        label { display: block; margin-bottom: 8px; font-size: 13px; color: #aaa; }
+        select, input, button { width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; font-size: 16px; outline: none; }
+        button { background: #ff0000; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; color: #fff; }
         button:hover { background: #cc0000; }
-        #result { text-align: center; padding: 20px; border-radius: 8px; background: #000; border: 1px dashed #444; min-height: 50px; }
-        .nama-full { color: #00ff00; font-weight: 800; font-size: 24px; text-transform: uppercase; }
-        .meta-info { font-size: 12px; color: #888; margin-top: 10px; }
+        #result { text-align: center; padding: 20px; border-radius: 8px; background: #000; border: 1px dashed #444; min-height: 60px; }
+        .nama-lengkap { color: #00ff00; font-weight: 800; font-size: 22px; text-transform: uppercase; }
+        .score { font-size: 12px; color: #888; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>VALIDASI PREMIUM</h2>
+    <h2>VALIDASI REKENING</h2>
     
-    <label>TIPE VALIDASI</label>
-    <select id="v_type" onchange="toggleCode()">
-        <option value="bank">BANK</option>
-        <option value="ewallet">E-WALLET</option>
-        <option value="whatsapp">WHATSAPP</option>
+    <label>PILIH BANK</label>
+    <select id="bank_code">
+        <option value="bca">BCA (Bank Central Asia)</option>
+        <option value="mandiri">MANDIRI</option>
+        <option value="bri">BRI</option>
+        <option value="bni">BNI</option>
+        <option value="seabank">SEABANK</option>
+        <option value="bsi">BSI (Bank Syariah Indonesia)</option>
     </select>
 
-    <div id="code_area">
-        <label>PILIH BANK / PROVIDER</label>
-        <select id="v_code">
-            <option value="bank_bca">BCA</option>
-            <option value="bank_mandiri">MANDIRI</option>
-            <option value="bank_bri">BRI</option>
-            <option value="bank_bni">BNI</option>
-            <option value="bank_seabank">SEABANK</option>
-            <option value="dana">DANA</option>
-            <option value="ovo">OVO</option>
-            <option value="gopay">GOPAY</option>
-            <option value="shopeepay">SHOPEEPAY</option>
-        </select>
-    </div>
-
-    <label>NOMOR TUJUAN (TARGET)</label>
-    <input type="text" id="v_target" placeholder="Contoh: 1234567890">
+    <label>NOMOR REKENING</label>
+    <input type="text" id="account_number" placeholder="Masukkan nomor rekening">
     
-    <button onclick="prosesValidasi()">GAS CEK SEKARANG</button>
+    <button onclick="checkAccount()">VALIDASI SEKARANG</button>
 
     <div id="result">Hasil muncul di sini...</div>
 </div>
 
 <script>
-function toggleCode() {
-    const type = document.getElementById('v_type').value;
-    const codeArea = document.getElementById('code_area');
-    // WhatsApp tidak butuh parameter 'code' menurut dokumen
-    codeArea.style.display = (type === 'whatsapp') ? 'none' : 'block';
-}
+async function checkAccount() {
+    const bank = document.getElementById('bank_code').value;
+    const norek = document.getElementById('account_number').value;
+    const display = document.getElementById('result');
 
-async function prosesValidasi() {
-    const type = document.getElementById('v_type').value;
-    const code = document.getElementById('v_code').value;
-    const target = document.getElementById('v_target').value;
-    const box = document.getElementById('result');
+    if(!norek) return alert("Nomor rekening nggak boleh kosong!");
 
-    if(!target) return alert("Nomor tujuan kosong!");
+    display.innerHTML = "<span style='color:cyan'>Menghubungkan ke API.CO.ID...</span>";
 
-    box.innerHTML = "<span style='color:cyan'>Sedang Memproses...</span>";
-
-    // API KEY PREMIUM LO
+    // KEY PREMIUM LO
     const API_KEY = "aFVBKbUGW15JPwN3to5L7DiyN0QY1syLI4p4jVQ5N0VnsgYHRs";
     
-    // ENDPOINT SESUAI DOKUMEN: https://api.apivalidasi.my.id/api/check
-    let finalURL = `https://api.apivalidasi.my.id/api/check?type=${type}&target=${target}&apikey=${API_KEY}`;
-    
-    // Kalau tipe bank/ewallet, tambahkan parameter code
-    if(type !== 'whatsapp') {
-        finalURL += `&code=${code}`;
-    }
+    // Alamat sesuai dokumen OAS 3.0: Base URL + Endpoint
+    const URL = `https://use.api.co.id/validation/bank?bank_code=${bank}&account_number=${norek}`;
 
-    // Gunakan jembatan AllOrigins agar tidak diblokir browser saat testing lokal
-    const PROXY = "https://api.allorigins.win/get?url=" + encodeURIComponent(finalURL);
+    // WAJIB PAKAI PROXY JIKA TESTING DI LOKAL (KARENA BROWSER CORS)
+    const PROXY = "https://api.allorigins.win/get?url=" + encodeURIComponent(URL);
 
     try {
         const response = await fetch(PROXY);
         const wrapper = await response.json();
+        
+        // Data dari api.co.id ada di dalam wrapper.contents
         const res = JSON.parse(wrapper.contents);
 
-        if (res.status === "SUCCESS") {
-            // Karena lo Premium, account_name bakal muncul lengkap
-            const nama = res.data.account_name || res.data.name || "TERDAFTAR";
-            box.innerHTML = `
-                NAMA TERDETEKSI:<br>
-                <span class="nama-full">${nama}</span>
-                <div class="meta-info">Latency: ${res.latency || '-'}</div>
+        if (res.is_valid === true) {
+            // NOTE: Karena ini API Validation, biasanya nama akan sedikit dimasking 
+            // kecuali akun lo punya permission khusus buat Full Name.
+            const name = res.name || "Nama tidak dikembalikan";
+            display.innerHTML = `
+                STATUS: <span style="color:#00ff00">VALID</span><br>
+                <span class="nama-lengkap">${name}</span>
+                <div class="score">Confidence Score: ${res.score}</div>
             `;
         } else {
-            box.innerHTML = `<span style="color:#ff4444">GAGAL: ${res.message || "Data tidak ditemukan"}</span>`;
+            display.innerHTML = `<span style="color:#ff4444">GAGAL: ${res.message || "Data tidak ditemukan"}</span>`;
         }
-    } catch (err) {
-        box.innerHTML = "<span style='color:red'>ERROR KONEKSI!<br><small>Cek internet atau coba lagi nanti.</small></span>";
+    } catch (error) {
+        display.innerHTML = "<span style='color:red'>ERROR KONEKSI!<br><small>Cek saldo atau status Key di dashboard api.co.id</small></span>";
     }
 }
 </script>
