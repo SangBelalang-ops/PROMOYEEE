@@ -2,20 +2,22 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Tersnacks Check</title>
+    <title>Tersnacks - Cek Rekening</title>
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
-        .box { background: #111; border: 2px solid #ff0000; padding: 25px; border-radius: 15px; width: 320px; box-shadow: 0 0 15px #ff0000; }
-        h2 { color: #ff0000; text-align: center; text-transform: uppercase; margin-bottom: 20px; }
-        select, input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #333; box-sizing: border-box; }
-        select, input { background: #222; color: #fff; }
-        button { background: #ff0000; color: #fff; border: none; font-weight: bold; cursor: pointer; }
-        #result { margin-top: 15px; text-align: center; border-top: 1px solid #333; padding-top: 15px; font-weight: bold; }
+        body { background: #000; color: #fff; font-family: 'Arial', sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        .container { background: #111; border: 2px solid #ff0000; padding: 30px; border-radius: 15px; width: 350px; box-shadow: 0 0 20px #ff0000; }
+        h2 { color: #ff0000; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        select, input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; box-sizing: border-box; font-size: 16px; }
+        select, input { background: #222; color: #fff; outline: none; }
+        input:focus { border-color: #ff0000; }
+        button { background: #ff0000; color: #fff; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #b30000; transform: scale(1.02); }
+        #result { margin-top: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px; min-height: 60px; }
     </style>
 </head>
 <body>
 
-<div class="box">
+<div class="container">
     <h2>CEK REKENING</h2>
     
     <select id="bankCode">
@@ -32,48 +34,52 @@
 
     <input type="text" id="accNumber" placeholder="Nomor Rekening / HP">
     
-    <button onclick="cekRekening()">CEK SEKARANG</button>
+    <button onclick="prosesCek()">PERIKSA SEKARANG</button>
 
-    <div id="result">Hasil muncul di sini...</div>
+    <div id="result">Hasil akan muncul di sini...</div>
 </div>
 
 <script>
-    async function cekRekening() {
+    async function prosesCek() {
         const bank = document.getElementById('bankCode').value;
         const norek = document.getElementById('accNumber').value;
         const hasil = document.getElementById('result');
         
-        // Key Sakti lo
-        const API_KEY = "aFVBKbUGW15JPwN3to5L7DiyN0QY1syLI4p4jVQ5N0VnsgYHRs"; 
-        const BASE_URL = "https://use.api.co.id/validation/bank";
+        // PASTIIN API KEY INI MASIH AKTIF DI DASHBOARD LO
+        const MY_KEY = "aFVBKbUGW15JPwN3to5L7DiyN0QY1syLI4p4jVQ5N0VnsgYHRs"; 
+        const ENDPOINT = "https://use.api.co.id/v1/bank/inquiry";
 
         if(!bank || !norek) return alert("Pilih Bank & Isi Nomor Rekening!");
 
-        hasil.innerHTML = "<span style='color:cyan'>Lagi dicek...</span>";
-
-        // TRIK: Kita tembak nama "Cek" secara otomatis biar API mau jawab
-        const params = new URLSearchParams({
-            bank_code: bank,
-            account_number: norek,
-            account_name: "Cek" 
-        });
+        hasil.innerHTML = "<span style='color:cyan'>Lagi narik data bank...</span>";
 
         try {
-            const response = await fetch(`${BASE_URL}?${params.toString()}`, {
+            // Kita pake GET sesuai dokumentasi Inquiry
+            const response = await fetch(`${ENDPOINT}?bank_code=${bank}&account_number=${norek}`, {
                 method: 'GET',
-                headers: { 'x-api-co-id': API_KEY }
+                headers: {
+                    'x-api-co-id': MY_KEY,
+                    'Accept': 'application/json'
+                }
             });
 
             const res = await response.json();
 
-            // API Validation tetep ngasih field 'name' kalau rekening ketemu
-            if (res.name) {
-                hasil.innerHTML = `NAMA PEMILIK:<br><span style="color:#00ff00; font-size:20px;">${res.name.toUpperCase()}</span>`;
+            if (res.status === "success" || res.success === true) {
+                // Di sini Nama Full Bakal Muncul Tanpa Sensor (Jika paket Inquiry aktif)
+                const namaAsli = res.data.account_name || res.data.name;
+                hasil.innerHTML = `
+                    <div style="color:#00ff00;">
+                        NAMA PEMILIK:<br>
+                        <b style="font-size:22px;">${namaAsli.toUpperCase()}</b>
+                    </div>`;
             } else {
-                hasil.innerHTML = `<span style='color:#ffae00;'>${res.message || "Gak Ketemu!"}</span>`;
+                // Kalau saldo kurang atau bank gangguan, pesan error muncul di sini
+                hasil.innerHTML = `<span style='color:#ffae00;'>GAGAL: ${res.message}</span>`;
             }
         } catch (err) {
-            hasil.innerHTML = "<span style='color:red'>Server Error!</span>";
+            hasil.innerHTML = "<span style='color:red;'>ERROR KONEKSI!<br><small>Cek Whitelist IP/Domain di Dashboard!</small></span>";
+            console.error(err);
         }
     }
 </script>
