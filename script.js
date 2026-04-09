@@ -1,32 +1,38 @@
-const API_KEY = "aFVBKbUGW15JPwN3to5L7DiyN0QY1syLI4p4jVQ5N0VnsgYHRs";
-
 async function cekRekening() {
     const bank = document.getElementById('bankCode').value;
     const norek = document.getElementById('accNumber').value;
     const hasil = document.getElementById('result');
-
-    if (!bank || !norek) return alert("Pilih Bank & Isi Nomor Rekening!");
-
-    hasil.innerHTML = "<span style='color: #00ffff'>Sabar, lagi diintip...</span>";
-
-    // Cek apakah e-wallet atau bank buat nentuin endpoint
-    const isEwallet = ["dana", "ovo", "gopay", "linkaja", "shopeepay"].includes(bank.toLowerCase());
-    const endpoint = isEwallet ? "getEwalletAccount" : "getBankAccount";
     
+    const API_KEY = "aFVBKbUGW15JPwN3to5L7DiyN0QY1syLI4p4jVQ5N0VnsgYHRs";
+    const URL = "https://use.api.co.id/v1/bank/account-validation"; // Sesuai endpoint mereka
+
+    if(!bank || !norek) return alert("Isi data dulu!");
+
+    hasil.innerText = "Checking...";
+
     try {
-        const response = await fetch(`https://api-rekening.lfourr.com/${endpoint}?bankCode=${bank}&accountNumber=${norek}`, {
-            headers: { 'x-api-key': API_KEY }
+        const response = await fetch(URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_KEY
+            },
+            body: JSON.stringify({
+                bank_code: bank,
+                account_number: norek
+            })
         });
-        
+
         const res = await response.json();
 
-        if (res.status === true || res.status === "success") {
-            const nama = res.data.name || res.data.account_name;
-            hasil.innerHTML = `NAMA:<br><b style="color: #00ff00; font-size: 20px;">${nama.toUpperCase()}</b>`;
+        // api.co.id biasanya ngasih response 'account_name'
+        if (res.status === "success" || res.success === true) {
+            const nama = res.data.account_name || res.data.name;
+            hasil.innerHTML = `NAMA: <br><b style="color:#00ff00; font-size:20px;">${nama.toUpperCase()}</b>`;
         } else {
-            hasil.innerHTML = "<span style='color: #ffae00;'>Data Gak Ada! Salah input kali.</span>";
+            hasil.innerText = res.message || "Data Tidak Ditemukan";
         }
     } catch (err) {
-        hasil.innerHTML = "<span style='color: #ff0000;'>Server API Ngambek!</span>";
+        hasil.innerText = "Koneksi Error!";
     }
 }
