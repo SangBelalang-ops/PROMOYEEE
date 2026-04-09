@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMIN TOOLS | REK-CHECKER</title>
+    <title>REK-FINDER PRO v2.5</title>
     <style>
-        :root { --primary: #f39c12; --bg: #0a0a0a; --card: #161616; --text: #eee; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: var(--card); padding: 30px; border-radius: 20px; width: 100%; max-width: 380px; border: 1px solid #333; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; }
+        :root { --primary: #00ff88; --bg: #050505; --card: #111; --text: #fff; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: var(--card); padding: 30px; border-radius: 20px; width: 100%; max-width: 380px; border: 1px solid #222; box-shadow: 0 0 30px rgba(0,255,136,0.1); }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 5px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+        .subtitle { text-align: center; font-size: 0.65em; color: #555; margin-bottom: 25px; }
         .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 8px; font-size: 0.8em; color: #888; font-weight: bold; }
-        select, input { width: 100%; padding: 14px; background: #222; border: 1px solid #444; color: #fff; border-radius: 10px; box-sizing: border-box; font-size: 1em; outline: none; }
-        select:focus, input:focus { border-color: var(--primary); }
-        button { width: 100%; padding: 16px; background: var(--primary); color: #000; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; margin-top: 10px; text-transform: uppercase; transition: 0.3s; }
-        button:hover { background: #e67e22; transform: scale(1.02); }
-        #hasil { margin-top: 25px; padding: 20px; background: #000; border-radius: 12px; min-height: 80px; text-align: center; border: 1px dashed #444; display: flex; flex-direction: column; justify-content: center; }
-        .nama-display { color: var(--primary); font-size: 1.4em; font-weight: bold; text-transform: uppercase; }
-        .loading-msg { color: #888; font-style: italic; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.5; } }
+        label { display: block; margin-bottom: 5px; font-size: 0.75em; color: #888; font-weight: bold; }
+        select, input { width: 100%; padding: 14px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; font-size: 1em; outline: none; }
+        button { width: 100%; padding: 16px; background: var(--primary); color: #000; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        button:hover { background: #00cc6e; transform: scale(1.02); }
+        #hasil { margin-top: 25px; padding: 20px; background: #000; border-radius: 12px; min-height: 80px; text-align: center; border: 1px dashed #333; }
+        .nama-res { color: var(--primary); font-size: 1.3em; font-weight: bold; text-transform: uppercase; }
+        .loading { color: #888; font-style: italic; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>REK-FINDER</h2>
+    <div class="subtitle">PRIVATE ADMIN TOOLS v2.5</div>
     
     <div class="input-group">
         <label>PILIH BANK / E-WALLET</label>
@@ -35,9 +36,8 @@
             <option value="bri">BRI</option>
             <option value="cimb">CIMB NIAGA</option>
             <option value="permata">PERMATA</option>
-            <option value="danamon">DANAMON</option>
-            <option value="gopay">GOPAY / OVO</option>
             <option value="dana">DANA</option>
+            <option value="gopay">GOPAY / OVO</option>
             <option value="linkaja">LINKAJA</option>
         </select>
     </div>
@@ -47,10 +47,10 @@
         <input type="number" id="norek" placeholder="Input nomor...">
     </div>
 
-    <button onclick="prosesCek()">CEK SEKARANG</button>
+    <button onclick="prosesCek()">CEK DATA SEKARANG</button>
 
     <div id="hasil">
-        <span style="color: #444; font-size: 0.9em;">Input nomor untuk memulai...</span>
+        <span style="color: #333;">HASIL AKAN MUNCUL DI SINI</span>
     </div>
 </div>
 
@@ -60,32 +60,27 @@ async function prosesCek() {
     const norek = document.getElementById('norek').value;
     const display = document.getElementById('hasil');
     
-    // URL GOOGLE SCRIPT TERBARU LO (SUDAH GUE UPDATE)
-    const gasURL = "https://script.google.com/macros/s/AKfycbwJAzPt0XCmB01Q7Qv1rSjDwHy2UIqNPHgNwB94ovCIq9xRPjeE1MTatPjhbBM_ZQfH/exec"; 
+    // URL GOOGLE SCRIPT TERBARU LO
+    const gasURL = "https://script.google.com/macros/s/AKfycbwswg6DwurFGjxiyTOA_a_69VwqKsh-7sPuGrgrhRhX4weBtKfUsaToInG-HuykHcokmg/exec"; 
 
-    if (!norek || norek.length < 5) {
-        alert("Norek minimal 5 digit, Bosku!");
-        return;
-    }
+    if (!norek) return alert("Nomornya mana, Bos?");
 
-    display.innerHTML = '<span class="loading-msg">SEDANG MEMERIKSA MULTI-SERVER...</span>';
+    display.innerHTML = '<span class="loading">MENGHUBUNGI SERVER GOOGLE...</span>';
 
     try {
-        // Tembak ke jembatan Google Script (Bypass CORS & Blokir)
         const response = await fetch(`${gasURL}?bank=${bank}&no=${norek}`);
         const data = await response.json();
 
-        // Logika baca hasil: Karena kode Multi-Engine gue balikin field "nama"
-        if (data.status === "success" || data.nama) {
+        if (data.status === "success" && data.nama) {
             display.innerHTML = `
-                <div style="font-size: 0.7em; color: #888; margin-bottom: 8px; font-weight: bold;">NAMA PEMILIK:</div>
-                <div class="nama-display">${data.nama}</div>
+                <div style="font-size: 0.7em; color: #888; margin-bottom: 5px;">ATAS NAMA:</div>
+                <div class="nama-res">${data.nama}</div>
             `;
         } else {
-            display.innerHTML = '<span class="error-msg">DATA TIDAK DITEMUKAN</span><br><small style="color: #555;">Cek nomor atau coba bank lain.</small>';
+            display.innerHTML = '<span style="color: #ff4444;">TIDAK DITEMUKAN</span><br><small style="color: #444;">API limit atau bank sedang offline.</small>';
         }
     } catch (err) {
-        display.innerHTML = '<span class="error-msg">SERVER BUSY / TIMEOUT</span><br><small style="color: #555;">Koneksi ke API pusat terganggu.</small>';
+        display.innerHTML = '<span style="color: #ff4444;">KONEKSI GAGAL</span><br><small style="color: #444;">Pastikan URL Script benar.</small>';
     }
 }
 </script>
