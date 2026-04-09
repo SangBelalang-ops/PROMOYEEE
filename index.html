@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <title>Sistem Validasi Rekening</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding-top: 50px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding-top: 50px; }
         .container { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 350px; }
-        h2 { text-align: center; color: #333; margin-bottom: 25px; font-size: 20px; }
+        h2 { text-align: center; color: #333; margin-bottom: 25px; font-size: 18px; text-transform: uppercase; }
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
         select, input, button { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
-        button { background-color: #2c3e50; color: white; border: none; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        button { background-color: #2c3e50; color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
         button:hover { background-color: #34495e; }
         #status-box { text-align: center; padding: 15px; border-radius: 6px; background: #f9f9f9; min-height: 40px; border: 1px dashed #ccc; }
-        .success-text { color: #27ae60; font-weight: bold; font-size: 18px; text-transform: uppercase; }
+        .success-text { color: #27ae60; font-weight: bold; font-size: 18px; }
         .error-text { color: #e74c3c; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>VALIDASI PEMILIK REKENING</h2>
+    <h2>VALIDASI REKENING</h2>
     
     <label>Pilih Bank</label>
     <select id="bankList">
@@ -29,6 +29,7 @@
         <option value="bni">BNI</option>
         <option value="seabank">SeaBank</option>
         <option value="jago">Bank Jago</option>
+        <option value="dana">DANA</option>
     </select>
 
     <label>Nomor Rekening</label>
@@ -47,31 +48,31 @@ async function checkAccount() {
 
     if(!norek) return alert("Masukkan nomor rekening!");
 
-    statusBox.innerHTML = "<span style='color:#3498db'>Sedang memverifikasi...</span>";
+    statusBox.innerHTML = "<span style='color:#3498db'>Menghubungkan ke Bank...</span>";
 
     const API_KEY = "aFVBKbUGW15JPwN3to5L7DiyN0QY1syLI4p4jVQ5N0VnsgYHRs";
     const TARGET_URL = `https://use.api.co.id/v1/bank/inquiry?bank_code=${bank}&account_number=${norek}`;
+    
+    // INI JEMBATANNYA (PROXY)
+    const PROXY_URL = `https://api.allorigins.win/get?url=${encodeURIComponent(TARGET_URL)}`;
 
     try {
-        const response = await fetch(TARGET_URL, {
-            method: 'GET',
-            headers: {
-                'x-api-co-id': API_KEY,
-                'Accept': 'application/json'
-            }
-        });
-
-        const data = await response.json();
+        const response = await fetch(PROXY_URL);
+        if (!response.ok) throw new Error("Network response was not ok");
+        
+        const wrapper = await response.json();
+        // Respon asli dari api.co.id ada di dalam field 'contents'
+        const data = JSON.parse(wrapper.contents);
 
         if (data.status === "success" || data.success === true) {
-            // Karena Premium, nama lengkap akan muncul di sini
             const fullName = data.data.account_name || data.data.name;
-            statusBox.innerHTML = `ATAS NAMA:<br><span class="success-text">${fullName}</span>`;
+            statusBox.innerHTML = `ATAS NAMA:<br><span class="success-text">${fullName.toUpperCase()}</span>`;
         } else {
-            statusBox.innerHTML = `<span class="error-text">GAGAL: ${data.message}</span>`;
+            statusBox.innerHTML = `<span class="error-text">GAGAL: ${data.message || "Data tidak ditemukan"}</span>`;
         }
     } catch (error) {
-        statusBox.innerHTML = "<span class='error-text'>ERROR KONEKSI!<br>Pastikan domain sudah terdaftar di dashboard API.</span>";
+        statusBox.innerHTML = "<span class='error-text'>SERVER ERROR!<br>Cek saldo atau API Key di dashboard.</span>";
+        console.error("Detail Error:", error);
     }
 }
 </script>
