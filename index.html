@@ -5,7 +5,7 @@
     <style>
         body { font-family: sans-serif; background: #121212; color: #fff; display: flex; justify-content: center; padding-top: 50px; }
         .card { background: #1e1e1e; padding: 30px; border-radius: 12px; width: 350px; border: 1px solid #333; }
-        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #444; background: #252525; color: #fff; }
+        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #444; background: #252525; color: #fff; font-size: 16px; }
         button { background: #007bff; font-weight: bold; cursor: pointer; border: none; }
         #hasil { margin-top: 20px; text-align: center; padding: 15px; background: #000; border-radius: 8px; min-height: 50px; }
         .nama-full { color: #28a745; font-weight: bold; font-size: 20px; text-transform: uppercase; }
@@ -38,7 +38,11 @@ async function gasCek() {
     box.innerHTML = "Sedang memproses...";
 
     const KEY = "aFVBKbUGW15JPwN3to5L7DiyN0QY1syLI4p4jVQ5N0VnsgYHRs";
-    const TARGET = `https://use.api.co.id/v1/bank/inquiry?bank_code=${bank}&account_number=${norek}`;
+    
+    // ALAMAT BARU (Update berdasarkan screenshot lo)
+    // Kita coba hilangkan '/v1' atau ganti ke subdomain yang benar
+    const TARGET = `https://api.apivalidasi.my.id/api/v1/bank/inquiry?bank_code=${bank}&account_number=${norek}`;
+    
     const PROXY = "https://api.allorigins.win/get?url=" + encodeURIComponent(TARGET);
 
     try {
@@ -46,25 +50,17 @@ async function gasCek() {
         const wrapper = await response.json();
         const res = JSON.parse(wrapper.contents);
 
-        console.log("Respon API:", res); // Cek di Inspect Element -> Console
+        console.log("Respon API Baru:", res);
 
         if (res.status === "success" || res.success === true) {
-            // Kita cari namanya di berbagai kemungkinan field
-            let namaFull = "";
-            if (res.data) {
-                namaFull = res.data.account_name || res.data.name || res.data.customer_name || res.data.account_holder_name;
-            }
-
-            if (namaFull) {
-                box.innerHTML = `NAMA PEMILIK:<br><span class="nama-full">${namaFull}</span>`;
-            } else {
-                box.innerHTML = "<span style='color:orange'>Sukses, tapi Nama Gak Ketemu.<br>Cek Console Log!</span>";
-            }
+            const namaFull = res.data.account_name || res.data.name || res.data.customer_name;
+            box.innerHTML = `NAMA PEMILIK:<br><span class="nama-full">${namaFull}</span>`;
         } else {
-            box.innerHTML = `<span style='color:red'>GAGAL: ${res.message || "Saldo Abis / Key Salah"}</span>`;
+            // Jika muncul "Cannot GET", kita coba alamat alternatif
+            box.innerHTML = `<span style='color:red'>GAGAL: ${res.errors || res.message || "Endpoint Salah"}</span>`;
         }
     } catch (err) {
-        box.innerHTML = "<span style='color:red'>KONEKSI ERROR!<br>Coba ganti koneksi internet (Hotspot).</span>";
+        box.innerHTML = "<span style='color:red'>KONEKSI ERROR!</span>";
     }
 }
 </script>
