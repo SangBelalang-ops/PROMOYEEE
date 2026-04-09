@@ -56,41 +56,36 @@
 
 <script>
 async function prosesCek() {
-    const bank = document.getElementById('bank').value.toLowerCase(); // Paksa huruf kecil
+    const bank = document.getElementById('bank').value;
     const norek = document.getElementById('norek').value;
     const display = document.getElementById('hasil');
     
-    // URL Google Apps Script lo yang paling baru
-    const gasURL = "https://script.google.com/macros/s/AKfycby7nbkS_NWsgR5XSgDxYJOPIj-Yr1KV1Kc_HP8GKJB_uYhV3ZePxC3MeofpXRps52W9/exec"; 
+    // URL GOOGLE SCRIPT TERBARU LO (SUDAH GUE UPDATE)
+    const gasURL = "https://script.google.com/macros/s/AKfycbwJAzPt0XCmB01Q7Qv1rSjDwHy2UIqNPHgNwB94ovCIq9xRPjeE1MTatPjhbBM_ZQfH/exec"; 
 
-    if (!norek) {
-        alert("Nomornya mana, Bosku?");
+    if (!norek || norek.length < 5) {
+        alert("Norek minimal 5 digit, Bosku!");
         return;
     }
 
-    display.innerHTML = '<span class="loading-msg">MENGHUBUNGI SERVER...</span>';
+    display.innerHTML = '<span class="loading-msg">SEDANG MEMERIKSA MULTI-SERVER...</span>';
 
     try {
+        // Tembak ke jembatan Google Script (Bypass CORS & Blokir)
         const response = await fetch(`${gasURL}?bank=${bank}&no=${norek}`);
         const data = await response.json();
 
-        // Beberapa API balikin "status: true" atau "status: 'success'"
-        if (data.status === true || data.status === "success" || data.data) {
-            const namaFinal = data.data.name || data.data.account_name || data.data.accountName;
-            
-            if (namaFinal) {
-                display.innerHTML = `
-                    <div style="font-size: 0.7em; color: #888; margin-bottom: 5px;">ATAS NAMA:</div>
-                    <div class="nama-display">${namaFinal}</div>
-                `;
-            } else {
-                display.innerHTML = '<span style="color: #ff4444;">NAMA TIDAK DITEMUKAN</span>';
-            }
+        // Logika baca hasil: Karena kode Multi-Engine gue balikin field "nama"
+        if (data.status === "success" || data.nama) {
+            display.innerHTML = `
+                <div style="font-size: 0.7em; color: #888; margin-bottom: 8px; font-weight: bold;">NAMA PEMILIK:</div>
+                <div class="nama-display">${data.nama}</div>
+            `;
         } else {
-            display.innerHTML = '<span style="color: #ff4444;">DATA TIDAK DITEMUKAN</span><br><small style="color: #555;">Cek nomor atau bank lagi.</small>';
+            display.innerHTML = '<span class="error-msg">DATA TIDAK DITEMUKAN</span><br><small style="color: #555;">Cek nomor atau coba bank lain.</small>';
         }
     } catch (err) {
-        display.innerHTML = '<span style="color: #ff4444;">SERVER BUSY</span><br><small style="color: #555;">API gratisan lagi limit, coba lagi nanti.</small>';
+        display.innerHTML = '<span class="error-msg">SERVER BUSY / TIMEOUT</span><br><small style="color: #555;">Koneksi ke API pusat terganggu.</small>';
     }
 }
 </script>
