@@ -1,86 +1,73 @@
 <?php
-// api.php
 header('Content-Type: application/json');
 
-// --- 1. MASUKKAN KEY KAMU DI SINI ---
+// --- API KEY KAMU SUDAH SAYA PASANG ---
 $API_KEY_COID   = "xy9sQ9AcQwFZcNeiSTSrwZoEDGh9dsdW7e8IJ2GqAlgsb72oqX"; 
 $API_KEY_GEMINI = "AIzaSyDoC3xsK5VY8lLKlWgGkCKW7rooQvylORo";
 
 $bank    = $_GET['bank'] ?? '';
 $account = $_GET['account'] ?? '';
 
-if (empty($bank) || empty($account)) {
+if (!$bank || !$account) {
     echo json_encode(['status' => 'error', 'message' => 'Input tidak lengkap']);
     exit;
 }
 
-// --- 2. CEK DOKUMENTASI API.CO.ID ---
-// Beberapa provider menggunakan endpoint berbeda. Coba cek dashboard kamu, 
-// biasanya pilih salah satu dari ini:
-// A. https://api.co.id/v1/check/bank
-// B. https://api.co.id/api/v1/bank
-$url_coid = "https://api.co.id/v1/check/bank?bank=$bank&account=$account";
+// 1. CEK KE API.CO.ID
+// Kita gunakan endpoint standar premium mereka
+$url_coid = "https://api.co.id/v1/bank/check?bank=$bank&account=$account";
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url_coid);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Mematikan cek SSL jika di localhost
-curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Authorization: Bearer $API_KEY_COID",
     "Accept: application/json"
 ]);
 
-$response_coid = curl_exec($ch);
-$httpCode = curl_getinfo($ch, HTTP_CODE);
-$curlError = curl_error($ch);
+$res_coid = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-// DEBUG: Jika ingin melihat mentahannya, aktifkan baris bawah ini:
-// die($response_coid); 
+$data_coid = json_decode($res_coid, true);
 
-if ($curlError) {
-    echo json_encode(['status' => 'error', 'message' => 'CURL Error: ' . $curlError]);
-    exit;
-}
-
-$data_coid = json_decode($response_coid, true);
-
-// --- 3. LOGIKA PEMBACAAN HASIL ---
-// Perhatikan struktur JSON dari api.co.id. 
-// Kadang menggunakan 'status' => 'success', kadang 'status' => 200, atau 'status' => true
+// 2. LOGIKA PEMBACAAN HASIL
 $isSuccess = false;
 $nama_pemilik = "";
 
-if (isset($data_coid['status']) && ($data_coid['status'] == "success" || $data_coid['status'] == 200 || $data_coid['status'] === true)) {
-    $isSuccess = true;
-    // Cek nama field-nya: apakah 'name', 'account_name', atau 'customer_name'?
-    $nama_pemilik = $data_coid['data']['name'] ?? $data_coid['data']['account_name'] ?? "User Found";
+// Cek berbagai kemungkinan format sukses (api.co.id kadang beda versi)
+if (($http_code == 200) && isset($data_coid['data'])) {
+    $nama_pemilik = $data_coid['data']['name'] ?? $data_coid['data']['account_name'] ?? "";
+    if ($nama_pemilik != "") {
+        $isSuccess = true;
+    }
 }
 
-// --- 4. ANALISIS AI (GEMINI) ---
-$ai_message = "Gunakan transaksi aman.";
-if ($isSuccess && !empty($API_KEY_GEMINI)) {
-    $url_gemini = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" . $API_KEY_GEMINI;
-    $prompt = ["contents" => [["parts" => [["text" => "Berikan tips singkat keamanan transfer ke $bank atas nama $nama_pemilik dalam 15 kata."]]]]];
-
-    $ch_ai = curl_init($url_gemini);
-    curl_setopt($ch_ai, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch_ai, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch_ai, CURLOPT_POST, true);
-    curl_setopt($ch_ai, CURLOPT_POSTFIELDS, json_encode($prompt));
-    curl_setopt($ch_ai, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    $response_ai = curl_exec($ch_ai);
-    curl_close($ch_ai);
+// 3. JIKA SUKSES, TANYA GEMINI AI
+$ai_msg = "Selalu pastikan nama pemilik rekening sesuai sebelum melakukan transfer.";
+if ($isSuccess) {
+    $url_ai = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$API_KEY_GEMINI";
+    $prompt = ["contents" => [["parts" => [["text" => "Berikan 1 kalimat tips singkat keamanan transfer bank untuk rekening atas nama $nama_pemilik."]]]]];
     
-    $resAi = json_decode($response_ai, true);
-    $ai_message = $resAi['candidates'][0]['content']['parts'][0]['text'] ?? "Rekening valid, silakan bertransaksi.";
+    $ch2 = curl_init($url_ai);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch2, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch2, CURLOPT_POST, true);
+    curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($prompt));
+    curl_setopt($ch2, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    
+    $res_ai = curl_exec($ch2);
+    $data_ai = json_decode($res_ai, true);
+    $ai_msg = $data_ai['candidates'][0]['content']['parts'][0]['text'] ?? $ai_msg;
+    curl_close($ch2);
 }
 
+// Kirim hasil ke index.html
 echo json_encode([
-    'debug_http_code' => $httpCode, // Untuk cek apakah koneksi sukses (200)
-    'bank_data' => $data_coid,
-    'is_success' => $isSuccess,
-    'nama_pemilik' => $nama_pemilik,
-    'ai_analysis' => $ai_message
+    'success'      => $isSuccess,
+    'nama'         => $nama_pemilik,
+    'ai_analysis'  => $ai_msg,
+    'debug'        => $data_coid // Untuk melihat error jika gagal
 ]);
