@@ -1,209 +1,156 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html ⚡ lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promo 3D Tersnacks</title>
-    <style>
-        body {
-            font-family: 'Arial Black', sans-serif;
-            margin: 0;
-            background-color: #121212; 
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            perspective: 2000px; /* Kedalaman 3D */
-            animation: bg-lightning 6s infinite;
-        }
+  <meta charset="utf-8">
+  <title>Warisan Nusantara - 5 Musim Snack Spesifik</title>
+  <link rel="canonical" href="https://websitemu.com/amp-snack-seasons-specific">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <meta name="theme-color" content="#111">
 
-        @keyframes bg-lightning {
-            0%, 94%, 98%, 100% { background-color: #121212; }
-            95%, 99% { background-color: #252525; }
-        }
+  <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  
+  <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+  <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+  <script async custom-element="amp-animation" src="https://cdn.ampproject.org/v0/amp-animation-0.1.js"></script>
 
-        /* --- PANGGUNG UTAMA --- */
-        .stage {
-            position: relative;
-            width: 800px;
-            height: 600px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform-style: preserve-3d;
-        }
+  <style amp-custom>
+    /* Reset & Font */
+    body { font-family: 'Inter', sans-serif; background: #111; color: #fff; margin: 0; overflow: hidden; }
+    
+    /* Layout Utama Atmosferik */
+    .hero { position: relative; height: 100vh; width: 100%; overflow: hidden; }
 
-        /* --- DISPLAY TENGAH --- */
-        .central-display {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            transform: translateZ(20px);
-        }
+    /* Background Dinamis (Layer paling belakang) */
+    .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #111; transition: background 1s ease; z-index: 1; }
 
-        .logo-top {
-            width: 130px;
-            filter: drop-shadow(0 0 10px #ffA500);
-            margin-bottom: 10px;
-        }
+    /* Partikel Atmosfer Spesifik (SVG Overlay) */
+    .particle-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+    
+    /* Menggunakan Pattern SVG untuk bentuk partikel spesifik */
+    #particle-group rect { fill: url(#snackPattern); opacity: 0.8; }
 
-        .image-wrapper {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto;
-            border-radius: 50%;
-            border: 6px solid #ffc107;
-            background-image: url('https://i.postimg.cc/x1yD1PBH/e5f0873b-c76b-4312-88bc-3bd67981a550.gif');
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0 0 30px #ffc107;
-            animation: pulse-glow 0.4s infinite alternate;
-        }
+    /* Header & Logo */
+    header { padding: 30px; position: absolute; top: 0; width: 100%; z-index: 10; text-align: center; }
+    .brand-logo { font-size: 0.9rem; font-weight: 800; letter-spacing: 5px; text-transform: uppercase; color: #fff; opacity: 0.6; }
 
-        @keyframes pulse-glow {
-            from { box-shadow: 0 0 20px #ffc107; }
-            to { box-shadow: 0 0 40px #00e5ff; border-color: #fff; }
-        }
+    /* Carousel Gambar */
+    .product-carousel { flex: 1; display: flex; align-items: center; justify-content: center; z-index: 3; height: 75vh; margin-top: 10vh; }
+    .slide-item { display: flex; align-items: center; justify-content: center; }
+    
+    /* Frame Gambar yang menonjol */
+    .img-container { width: 85%; max-width: 380px; filter: drop-shadow(0 40px 80px rgba(0,0,0,0.7)); transition: transform 0.3s ease; }
+    [visible] .img-container { transform: scale(1.03); } /* Subtle zoom */
 
-        .price-tag {
-            font-size: 50px;
-            color: #00ff00;
-            text-shadow: 0 0 20px #00ff00;
-            margin: 10px 0;
-        }
+    /* Detail Teks Rasa */
+    .product-details { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px; text-align: center; z-index: 5; }
+    .rasa-name { font-size: 1.6rem; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 3px; }
+    
+    /* Tombol CTA MANTAP (Sticky & Pulse) */
+    .cta-container { position: fixed; bottom: 0; width: 100%; padding: 20px; box-sizing: border-box; display: flex; justify-content: center; z-index: 100; }
+    .btn-buy { background: #fff; color: #000; padding: 20px 50px; border-radius: 50px; text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 2px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); animation: pulse 2s infinite; }
 
-        /* --- SISTEM ORBIT 3D --- */
-        .orbit-system {
-            position: absolute;
-            width: 750px;
-            height: 750px;
-            transform-style: preserve-3d;
-            transform: rotateX(75deg); /* Miringkan orbit */
-        }
-
-        .orbit-visual-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 3px dashed rgba(0, 229, 255, 0.3);
-            border-radius: 50%;
-        }
-
-        .spinner {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            animation: rotate-orbit 15s linear infinite;
-        }
-
-        @keyframes rotate-orbit {
-            from { transform: rotateZ(0deg); }
-            to { transform: rotateZ(360deg); }
-        }
-
-        /* --- ITEM BUNGKUSAN SNACK --- */
-        .snack-item {
-            position: absolute;
-            width: 140px; 
-            height: 180px;
-            left: 50%;
-            top: 50%;
-            margin-left: -70px;
-            margin-top: -90px;
-            transform-style: preserve-3d;
-        }
-
-        .snack-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            /* Melawan kemiringan orbit agar bungkusan tetap tegak */
-            transform: rotateX(-75deg); 
-            filter: drop-shadow(5px 15px 10px rgba(0,0,0,0.8));
-            transition: all 0.3s;
-        }
-
-        .snack-label {
-            position: absolute;
-            bottom: -30px;
-            width: 200px;
-            left: -30px;
-            text-align: center;
-            font-size: 12px;
-            background: rgba(0,0,0,0.7);
-            padding: 4px;
-            border-radius: 4px;
-            transform: rotateX(-75deg);
-            display: none; /* Muncul saat highlight */
-        }
-
-        .highlight img {
-            transform: rotateX(-75deg) scale(1.3);
-            filter: drop-shadow(0 0 20px #00e5ff);
-        }
-
-        .highlight .snack-label { display: block; }
-
-    </style>
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255,255,255,0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="stage">
-        
-        <div class="central-display">
-            <img src="https://i.postimg.cc/hGYqktH0/download.png" class="logo-top">
-            <div class="image-wrapper"></div>
-            <div class="price-tag">3$</div>
-            <div style="font-size: 14px; letter-spacing: 2px;">PROMO TER-DAHSYAT</div>
-        </div>
+  <amp-state id="productData">
+    <script type="application/json">
+      {
+        "currentIndex": 0,
+        "items": [
+          { "name": "KUE SUS COKLAT", "bg": "#1A0F0A", "pUrl": "sus_coklat_particle.png", "pSpeed": 1.8 },
+          { "name": "BALADO PADANG", "bg": "#5F0808", "pUrl": "padang_keripik_particle.png", "pSpeed": 1.2 },
+          { "name": "KUE BAWANG MEDAN", "bg": "#997300", "pUrl": "medan_bawang_particle.png", "pSpeed": 1.5 },
+          { "name": "UNTIR UNTIR", "bg": "#3E2723", "pUrl": "untir_particle.png", "pSpeed": 1.4 },
+          { "name": "BASRENG DAUN JERUK", "bg": "#37474F", "pUrl": "basreng_daun_particle.png", "pSpeed": 1.0 }
+        ]
+      }
+    </script>
+  </amp-state>
 
-        <div class="orbit-system">
-            <div class="orbit-visual-ring"></div>
-            <div id="snack-spinner" class="spinner">
-                </div>
-        </div>
+  <div class="hero">
+    
+    <div class="hero-bg" [style]="'background:' + productData.items[productData.currentIndex].bg"></div>
+    
+    <svg class="particle-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <pattern id="snackPattern" patternUnits="userSpaceOnUse" width="10" height="10">
+            <image href="particleData.items[productData.currentIndex].pUrl" x="0" y="0" width="10" height="10" />
+          </pattern>
+        </defs>
+        <g id="particle-group">
+            <rect cx="10" cy="-15" width="4" height="6" rx="1"/>
+            <rect cx="30" cy="-25" width="5" height="8" rx="1"/>
+            <rect cx="50" cy="-35" width="3" height="10" rx="1"/>
+            <rect cx="70" cy="-45" width="6" height="7" rx="1"/>
+            <rect cx="90" cy="-55" width="4" height="9" rx="1"/>
+            </g>
+    </svg>
 
+    <header>
+      <div class="brand-logo">WARISAN NUSANTARA</div>
+    </header>
+
+    <amp-carousel class="product-carousel" width="100" height="100" layout="responsive" type="slides" autoplay delay="4500"
+      on="slideChange:AMP.setState({ productData: {currentIndex: event.index}})">
+      
+      <div class="slide-item">
+        <div class="img-container">
+          <amp-img src="sus_coklat_transparant.png" width="400" height="400" layout="responsive"></amp-img>
+        </div>
+      </div>
+      <div class="slide-item">
+        <div class="img-container">
+          <amp-img src="padang_balado_transparant.png" width="400" height="400" layout="responsive"></amp-img>
+        </div>
+      </div>
+      <div class="slide-item">
+        <div class="img-container">
+          <amp-img src="medan_bawang_transparant.png" width="400" height="400" layout="responsive"></amp-img>
+        </div>
+      </div>
+      </amp-carousel>
+
+    <div class="product-details">
+      <h1 class="rasa-name" [text]="productData.items[productData.currentIndex].name">WARISAN</h1>
     </div>
 
-    <script>
-        const snacks = [
-            { name: "KUE SUS KERING COKLAT", img: "https://i.postimg.cc/nLX3vcfH/5a308155-4a39-40bc-b5ff-6c53942c6446.jpg" },
-            { name: "KERIPIK BALADO PADANG", img: "https://i.postimg.cc/7LprzWcc/fc5d75bb-8868-4c74-80b9-289bc86bb0c1.jpg" },
-            { name: "KUE BAWANG", img: "https://i.postimg.cc/W496fRjy/1904dff8-56e9-48b2-83c4-57a376284b27.jpg" },
-            { name: "UNTIR UNTIR", img: "https://i.postimg.cc/3Rd6tFMx/09220392-ad87-478d-9fcf-0c67b1ba6cfb.jpg" },
-            { name: "BASRENG ORIGINAL", img: "https://i.postimg.cc/sxBMf8kX/3428ff40-8068-4717-baf3-0bc8ffe5ef7f.jpg" }
-        ];
+  </div>
 
-        const spinner = document.getElementById('snack-spinner');
-        const radius = 340; 
+  <div class="cta-container">
+    <a href="https://websitemu.com/keranjang" class="btn-buy">Beli Sekarang</a>
+  </div>
 
-        snacks.forEach((snack, i) => {
-            const angle = (i / snacks.length) * Math.PI * 2;
-            const x = radius * Math.cos(angle);
-            const y = radius * Math.sin(angle);
-
-            const div = document.createElement('div');
-            div.className = 'snack-item';
-            div.id = `snack-${i}`;
-            div.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-
-            div.innerHTML = `
-                <img src="${snack.img}" alt="${snack.name}">
-                <div class="snack-label">${snack.name}</div>
-            `;
-            spinner.appendChild(div);
-        });
-
-        // Efek Highlight bergantian
-        let current = 0;
-        setInterval(() => {
-            document.querySelectorAll('.snack-item').forEach(el => el.classList.remove('highlight'));
-            document.getElementById(`snack-${current}`).classList.add('highlight');
-            current = (current + 1) % snacks.length;
-        }, 3000);
+  <amp-animation id="animGroup" layout="nodisplay">
+    <script type="application/json">
+        {
+          "selector": "#particle-group rect",
+          "duration": "rand(0.8s, 1.5s)",
+          "keyframes": [
+            { "transform": "translateY(0) rotate(rand(-20deg, 20deg))", "opacity": 0 },
+            { "transform": "translateY(110vh) rotate(rand(-40deg, 40deg))", "opacity": 1 }
+          ],
+          "fill": "both",
+          "iterations": "infinite",
+          "delay": "rand(0, 0.8s)"
+        }
     </script>
+  </amp-animation>
+  
+  <amp-animation id="onLoadAnim" layout="nodisplay">
+      <script type="application/json">
+        {
+          "selector": "body",
+          "on": "load:animGroup.start()"
+        }
+      </script>
+  </amp-animation>
+
 </body>
 </html>
