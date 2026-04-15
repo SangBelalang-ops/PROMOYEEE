@@ -3,33 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tersnacks 3D Orbit Promo</title>
+    <title>Promo 3D Tersnacks</title>
     <style>
-        /* --- RESET & LAYOUT --- */
         body {
             font-family: 'Arial Black', sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #1a1a1a; 
-            overflow: hidden;
+            background-color: #121212; 
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            /* Efek Kilat Global */
+            overflow: hidden;
+            perspective: 2000px; /* Kedalaman 3D */
             animation: bg-lightning 6s infinite;
-            /* Penting untuk Efek 3D */
-            perspective: 1500px; 
         }
 
-        /* ⚡ ANIMASI PETIR BACKGROUND ⚡ */
         @keyframes bg-lightning {
-            0%, 95%, 98% { background-color: #1a1a1a; }
-            96%, 99% { background-color: #2a2a2a; }
+            0%, 94%, 98%, 100% { background-color: #121212; }
+            95%, 99% { background-color: #252525; }
         }
 
-        /* --- KONTENER UTAMA --- */
+        /* --- PANGGUNG UTAMA --- */
         .stage {
             position: relative;
             width: 800px;
@@ -37,122 +32,120 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Membuat semua anak panggung dalam ruang 3D */
             transform-style: preserve-3d;
         }
 
-        /* --- PRODUK TENGAH (STatis) --- */
+        /* --- DISPLAY TENGAH --- */
         .central-display {
             position: relative;
-            width: 300px;
-            text-align: center;
             z-index: 10;
-            /* Mengangkat sedikit agar di tengah cincin */
-            transform: translateZ(50px); 
+            text-align: center;
+            transform: translateZ(20px);
         }
 
         .logo-top {
-            width: 150px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(255,165,0,0.9));
+            width: 130px;
+            filter: drop-shadow(0 0 10px #ffA500);
+            margin-bottom: 10px;
         }
 
-        /* Area GIF Tengah dengan Listrik */
         .image-wrapper {
-            width: 250px;
-            height: 250px;
-            margin: 0 auto 20px;
-            overflow: hidden;
-            border-radius: 50%; /* Bulat sempurna */
-            border: 5px solid #ffc107;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            border-radius: 50%;
+            border: 6px solid #ffc107;
             background-image: url('https://i.postimg.cc/x1yD1PBH/e5f0873b-c76b-4312-88bc-3bd67981a550.gif');
             background-size: cover;
             background-position: center;
-            position: relative;
-            box-shadow: 0 0 30px rgba(255, 193, 7, 0.7);
-            animation: electric-glow-central 0.3s infinite alternate;
+            box-shadow: 0 0 30px #ffc107;
+            animation: pulse-glow 0.4s infinite alternate;
         }
 
-        @keyframes electric-glow-central {
-            0% { border-color: #ffc107; box-shadow: 0 0 15px #ffc107; }
-            100% { border-color: #fff; box-shadow: 0 0 35px #00e5ff, 0 0 15px #fff; }
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 20px #ffc107; }
+            to { box-shadow: 0 0 40px #00e5ff; border-color: #fff; }
         }
 
-        .central-price {
-            font-size: 48px;
+        .price-tag {
+            font-size: 50px;
             color: #00ff00;
-            margin: 0;
-            text-shadow: 0 0 20px rgba(0,255,0,0.8);
-            font-style: italic;
+            text-shadow: 0 0 20px #00ff00;
+            margin: 10px 0;
         }
 
-        /* --- SISTEM ORBIT 3D (CINCIN) --- */
+        /* --- SISTEM ORBIT 3D --- */
         .orbit-system {
             position: absolute;
-            width: 700px; /* Diameter Cincin */
-            height: 700px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 750px;
+            height: 750px;
             transform-style: preserve-3d;
-            /* Memiringkan cincin agar terlihat 3D (seperti Saturnus) */
-            transform: rotateX(70deg) rotateY(0deg); 
+            transform: rotateX(75deg); /* Miringkan orbit */
         }
 
-        /* Cincin Visual (Garis Putus-putus) */
-        .orbit-ring-visual {
+        .orbit-visual-ring {
             position: absolute;
             width: 100%;
             height: 100%;
+            border: 3px dashed rgba(0, 229, 255, 0.3);
             border-radius: 50%;
-            border: 4px dashed rgba(0, 229, 255, 0.4);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
-            /* Memastikan visual cincin miring mengikuti system */
-            transform: translateZ(0px); 
         }
 
-        /* Kontener yang BERPUTAR */
-        .orbit-spinner {
+        .spinner {
             position: absolute;
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            /* Animasi putaran utama */
-            animation: orbit-rotate-3d 20s linear infinite;
+            animation: rotate-orbit 15s linear infinite;
         }
 
-        @keyframes orbit-rotate-3d {
+        @keyframes rotate-orbit {
             from { transform: rotateZ(0deg); }
             to { transform: rotateZ(360deg); }
         }
 
-        /* --- ITEM PRODUK BUNGKUSAN (Muter) --- */
-        .orbit-item {
+        /* --- ITEM BUNGKUSAN SNACK --- */
+        .snack-item {
             position: absolute;
-            width: 120px; /* Ukuran Bungkusan */
-            height: 160px; /* Sesuaikan proporsi bungkusan PNG-mu */
-            /* Transparan agar hanya bungkusan yang terlihat */
-            background: transparent; 
+            width: 140px; 
+            height: 180px;
+            left: 50%;
+            top: 50%;
+            margin-left: -70px;
+            margin-top: -90px;
             transform-style: preserve-3d;
-            /* Titik rotasi di tengah item */
-            margin-left: -60px; /* Setengah width */
-            margin-top: -80px;  /* Setengah height */
         }
 
-        .orbit-item img {
+        .snack-item img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Memastikan PNG tidak terpotong */
-            /* EFEK PENTING: Menangkal kemiringan cincin agar produk tetap tegak menghadap layar */
-            transform: rotateX(-70deg); 
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-            transition: all 0.3s ease;
+            object-fit: contain;
+            /* Melawan kemiringan orbit agar bungkusan tetap tegak */
+            transform: rotateX(-75deg); 
+            filter: drop-shadow(5px 15px 10px rgba(0,0,0,0.8));
+            transition: all 0.3s;
         }
 
-        /* Efek Listrik saat Produk Disorot (Highlight) */
-        .orbit-item.highlight img {
-            filter: drop-shadow(0 0 20px #00e5ff) drop-shadow(0 0 10px #fff) scale(1.2);
+        .snack-label {
+            position: absolute;
+            bottom: -30px;
+            width: 200px;
+            left: -30px;
+            text-align: center;
+            font-size: 12px;
+            background: rgba(0,0,0,0.7);
+            padding: 4px;
+            border-radius: 4px;
+            transform: rotateX(-75deg);
+            display: none; /* Muncul saat highlight */
         }
+
+        .highlight img {
+            transform: rotateX(-75deg) scale(1.3);
+            filter: drop-shadow(0 0 20px #00e5ff);
+        }
+
+        .highlight .snack-label { display: block; }
 
     </style>
 </head>
@@ -161,79 +154,56 @@
     <div class="stage">
         
         <div class="central-display">
-            <a href="https://tersnacks.pages.dev" target="_blank">
-                <img src="https://i.postimg.cc/hGYqktH0/download.png" class="logo-top" alt="Logo Tersnacks">
-            </a>
+            <img src="https://i.postimg.cc/hGYqktH0/download.png" class="logo-top">
             <div class="image-wrapper"></div>
-            <div class="central-price">3$</div>
+            <div class="price-tag">3$</div>
+            <div style="font-size: 14px; letter-spacing: 2px;">PROMO TER-DAHSYAT</div>
         </div>
 
         <div class="orbit-system">
-            <div class="orbit-ring-visual"></div>
-            <div id="orbit-spinner" class="orbit-spinner">
+            <div class="orbit-visual-ring"></div>
+            <div id="snack-spinner" class="spinner">
                 </div>
         </div>
 
     </div>
 
     <script>
-        // --- DATA PRODUK BARU (GANTI LINK FOTO PNG DISINI) ---
-        const products = [
-            { id: 1, name: "KUE SUS", img: "https://placehold.co/120x160/png?text=SUS+PNG" },
-            { id: 2, name: "BALADO", img: "https://placehold.co/120x160/png?text=BALADO+PNG" },
-            { id: 3, name: "KUE BAWANG", img: "https://placehold.co/120x160/png?text=BAWANG+PNG" },
-            { id: 4, name: "UNTIR UNTIR", img: "https://placehold.co/120x160/png?text=UNTIR+PNG" },
-            { id: 5, name: "BASRENG", img: "https://placehold.co/120x160/png?text=BASRENG+PNG" }
+        const snacks = [
+            { name: "KUE SUS KERING COKLAT", img: "https://i.postimg.cc/nLX3vcfH/5a308155-4a39-40bc-b5ff-6c53942c6446.jpg" },
+            { name: "KERIPIK BALADO PADANG", img: "https://i.postimg.cc/7LprzWcc/fc5d75bb-8868-4c74-80b9-289bc86bb0c1.jpg" },
+            { name: "KUE BAWANG", img: "https://i.postimg.cc/W496fRjy/1904dff8-56e9-48b2-83c4-57a376284b27.jpg" },
+            { name: "UNTIR UNTIR", img: "https://i.postimg.cc/3Rd6tFMx/09220392-ad87-478d-9fcf-0c67b1ba6cfb.jpg" },
+            { name: "BASRENG ORIGINAL", img: "https://i.postimg.cc/sxBMf8kX/3428ff40-8068-4717-baf3-0bc8ffe5ef7f.jpg" }
         ];
 
-        const spinner = document.getElementById('orbit-spinner');
-        const totalItems = products.length;
-        const radius = 350; // Jarak dari tengah ke bungkusan
+        const spinner = document.getElementById('snack-spinner');
+        const radius = 340; 
 
-        // 1. Render Bungkusan di Posisi 3D
-        products.forEach((product, i) => {
-            const angle = (i / totalItems) * Math.PI * 2;
-            
-            // Hitung posisi X dan Y di lingkaran datar
+        snacks.forEach((snack, i) => {
+            const angle = (i / snacks.length) * Math.PI * 2;
             const x = radius * Math.cos(angle);
             const y = radius * Math.sin(angle);
 
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'orbit-item';
-            itemDiv.id = `product-${i}`;
-            
-            // Atur posisi awal item (masih datar di cincin)
-            // Kita pakai translate3d untuk performa
-            itemDiv.style.transform = `translate3d(${x}px, ${y}px, 0px)`;
+            const div = document.createElement('div');
+            div.className = 'snack-item';
+            div.id = `snack-${i}`;
+            div.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 
-            const img = document.createElement('img');
-            img.src = product.img;
-            img.alt = product.name;
-            
-            itemDiv.appendChild(img);
-            spinner.appendChild(itemDiv);
+            div.innerHTML = `
+                <img src="${snack.img}" alt="${snack.name}">
+                <div class="snack-label">${snack.name}</div>
+            `;
+            spinner.appendChild(div);
         });
 
-        // 2. Logika Highlight Produk (Opsional, agar mata tertuju ke 1 produk)
-        let currentIndex = 0;
-        function highlightNextProduct() {
-            // Hapus highlight lama
-            document.querySelectorAll('.orbit-item').forEach(el => el.classList.remove('highlight'));
-            
-            // Tambah highlight baru
-            const currentItem = document.getElementById(`product-${currentIndex}`);
-            if (currentItem) {
-                currentItem.classList.remove('lowlight'); // Pastikan tidak redup
-                currentItem.classList.add('highlight');
-            }
-
-            currentIndex = (currentIndex + 1) % products.length;
-        }
-
-        // Jalankan highlight tiap 4 detik
-        highlightNextProduct(); 
-        setInterval(highlightNextProduct, 4000);
-
+        // Efek Highlight bergantian
+        let current = 0;
+        setInterval(() => {
+            document.querySelectorAll('.snack-item').forEach(el => el.classList.remove('highlight'));
+            document.getElementById(`snack-${current}`).classList.add('highlight');
+            current = (current + 1) % snacks.length;
+        }, 3000);
     </script>
 </body>
 </html>
