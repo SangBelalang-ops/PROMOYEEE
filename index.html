@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERSNACKS.ID - PREMIUM QUALITY</title>
+    <title>TERSNACKS.ID - WINTER EDITION</title>
     <style>
         :root { 
-            /* TEMA MUSIM GUGUR */
-            --primary: #ff8c00; /* Dark Orange */
-            --glass: rgba(43, 24, 16, 0.9); /* Warm Dark Brown */
-            --success: #ffd700; /* Gold */
-            --danger: #b22222; /* Firebrick */
-            --gold: #ffea00;
-            --leaf-1: #d35400;
-            --leaf-2: #e67e22;
-            --leaf-3: #f1c40f;
+            /* TEMA WINTER / SALJU */
+            --primary: #a5f3fc; /* Ice Blue */
+            --glass: rgba(15, 23, 42, 0.85); /* Deep Night Blue */
+            --success: #ffffff; /* Snow White */
+            --danger: #ff4d4d;
+            --gold: #fde047;
+            --snow-glow: rgba(255, 255, 255, 0.4);
         }
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            margin: 0; background: #1a0f0a; color: white; 
+            margin: 0; background: #020617; color: white; 
             text-align: center; padding-bottom: 50px; overflow-x: hidden; 
         }
 
@@ -36,12 +34,13 @@
             position: relative; 
             z-index: 10; padding: 45px 10px; 
             background: var(--glass); border-bottom: 2px solid var(--primary); 
-            box-shadow: 0 0 20px rgba(255, 140, 0, 0.2);
+            box-shadow: 0 0 25px rgba(165, 243, 252, 0.15);
+            backdrop-filter: blur(5px);
         }
         
         .logo-header { 
             width: 280px; margin-bottom: 10px; 
-            filter: drop-shadow(0 0 10px var(--primary)); 
+            filter: drop-shadow(0 0 15px var(--primary)); 
         }
         
         header p { 
@@ -60,25 +59,16 @@
             to { background-position: 200% center; }
         }
 
-        .kentang-left {
+        .kentang-left, .kentang-right {
             position: absolute;
             bottom: 0;      
-            left: 10px;    
             width: 130px; 
             z-index: 11;
             pointer-events: none;
             filter: drop-shadow(0 0 10px var(--primary));
         }
-
-        .kentang-right {
-            position: absolute;
-            bottom: 0;     
-            right: 10px;  
-            width: 130px;   
-            z-index: 11;
-            pointer-events: none;
-            filter: drop-shadow(0 0 10px var(--primary));
-        }
+        .kentang-left { left: 10px; }
+        .kentang-right { right: 10px; }
 
         .grid { 
             display: grid; 
@@ -93,9 +83,10 @@
         
         .card { 
             background: var(--glass); border-radius: 15px; overflow: hidden; 
-            border: 1px solid rgba(255, 140, 0, 0.2); position: relative; 
+            border: 1px solid rgba(165, 243, 252, 0.2); position: relative; 
             transition: 0.3s;
         }
+        .card:hover { border-color: var(--primary); }
         .card img { width: 100%; height: 130px; object-fit: cover; }
         
         .sold-out-overlay { 
@@ -119,40 +110,35 @@
         }
         
         .stock-tag { 
-            font-size: 0.65em; color: var(--primary); 
-            background: rgba(255, 140, 0, 0.1); border-radius: 5px; 
+            font-size: 0.65em; color: #fff; 
+            background: rgba(165, 243, 252, 0.2); border-radius: 5px; 
             padding: 2px 8px; display: inline-block; 
             margin-bottom: 10px; font-weight: 900;
         }
 
         .counter { display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-qty { 
-            background: rgba(255,255,255,0.1); border: 1px solid var(--primary); 
+            background: rgba(255,255,255,0.05); border: 1px solid var(--primary); 
             width: 30px; height: 30px; border-radius: 8px; color: white; cursor: pointer; 
         }
         
-        .btn-qty:disabled {
-            border-color: #444;
-            color: #444;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
+        .btn-qty:disabled { opacity: 0.3; cursor: not-allowed; }
 
         #total-bar { 
             position: fixed; bottom: 0; left: 0; right: 0; 
-            background: var(--glass); padding: 18px 25px; display: none; 
+            background: rgba(15, 23, 42, 0.95); padding: 18px 25px; display: none; 
             justify-content: space-between; align-items: center; 
             border-top: 2px solid var(--primary); z-index: 1000; 
-            backdrop-filter: blur(10px); 
+            backdrop-filter: blur(15px); 
         }
         .btn-order { 
-            background: var(--primary); color: black; border: none; 
+            background: var(--primary); color: #020617; border: none; 
             padding: 12px 25px; border-radius: 12px; font-weight: 900; cursor: pointer; 
         }
 
         #payment-area { 
             position: relative; z-index: 10; display:none; padding: 40px 20px; 
-            background: rgba(26, 15, 10, 0.98); border-top: 2px solid var(--primary); 
+            background: #020617; border-top: 2px solid var(--primary); 
         }
         .input-nama { 
             width: 85%; padding: 15px; border-radius: 12px; 
@@ -165,7 +151,7 @@
             background: transparent; border: 2px solid var(--primary); color: white; 
             padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 900; 
         }
-        .opt-btn.active { background: var(--primary); color: black; }
+        .opt-btn.active { background: var(--primary); color: #020617; }
 
         .qr-display { display: none; justify-content: center; margin-bottom: 30px; }
         .qr-box { background: white; padding: 12px; border-radius: 15px; width: 200px; }
@@ -173,21 +159,20 @@
         .qr-label { color: black; font-size: 0.8em; font-weight: 900; margin-top: 8px; }
 
         .final-btn { 
-            background: var(--success); color: #000; padding: 18px; 
+            background: var(--success); color: #020617; padding: 18px; 
             border: none; border-radius: 50px; font-weight: 900; 
-            width: 90%; cursor: pointer; 
+            width: 90%; cursor: pointer; box-shadow: 0 0 15px white;
         }
 
         footer { 
             position: relative; z-index: 10; margin-top: 60px; 
-            padding: 50px 20px; border-top: 1px solid rgba(255, 140, 0, 0.2); 
-            background: rgba(43, 24, 16, 0.6); 
+            padding: 50px 20px; border-top: 1px solid rgba(165, 243, 252, 0.2); 
+            background: rgba(15, 23, 42, 0.6); 
         }
 
         @media (max-width: 600px) { 
             .grid { grid-template-columns: repeat(2, 1fr); } 
-            .kentang-left { width: 90px; bottom: -15px; left: 10px; } 
-            .kentang-right { width: 90px; bottom: -15px; right: 10px; } 
+            .kentang-left, .kentang-right { width: 90px; bottom: -15px; } 
         }
     </style>
 </head>
@@ -198,18 +183,18 @@
 <header>
     <img src="https://i.postimg.cc/T3Dj51gC/download.png" class="logo-header">
     <h2 style="margin:0; font-size: 1.4em; font-weight: 900;">TERSNACKS.ID</h2>
-    <p>PREMIUM QUALITY • $3.00</p>
+    <p>WINTER SPECIAL • $3.00</p>
     
     <img src="https://i.postimg.cc/wMKm57LB/output-onlinegiftools.gif" class="kentang-left" alt="Kentang Payung Kiri">
     <img src="https://i.postimg.cc/T1rdWcrD/output-onlinegiftools-(1).gif" class="kentang-right" alt="Kentang Outline Kanan">
 </header>
 
-<div id="loading" style="padding: 50px; color: var(--primary); font-weight: 800;">SYNCING STOCK...</div>
+<div id="loading" style="padding: 50px; color: var(--primary); font-weight: 800;">FROSTING DATA...</div>
 <div class="grid" id="container-snack"></div>
 
 <div id="total-bar">
     <div style="text-align:left">
-        <div id="summary" style="font-size: 0.65em; color: #ccc;"></div>
+        <div id="summary" style="font-size: 0.65em; color: #cbd5e1;"></div>
         <div id="display-total" style="font-weight: 900; color: var(--primary); font-size: 1.4em;">$0.00</div>
     </div>
     <button class="btn-order" onclick="openPayment()">ORDER SEKARANG</button>
@@ -243,56 +228,57 @@
 </div>
 
 <footer>
-    <h3 style="color: var(--primary); letter-spacing: 2px; margin-bottom: 10px; font-weight: 900; font-size: 1.1em;">THANK YOU FOR SHOPPING!</h3>
+    <h3 style="color: var(--primary); letter-spacing: 2px; margin-bottom: 10px; font-weight: 900; font-size: 1.1em;">STAY WARM & ENJOY!</h3>
     <div style="color: #fff; font-size: 0.9em; font-weight: 700; opacity: 0.8;">TERIMA KASIH SUDAH BERBELANJA DI TERSNACKS.ID</div>
-    <div style="margin-top: 25px; opacity: 0.3; font-size: 0.6em; letter-spacing: 5px; font-weight: 900;">TERSNACKS.ID • 2026</div>
+    <div style="margin-top: 25px; opacity: 0.3; font-size: 0.6em; letter-spacing: 5px; font-weight: 900;">TERSNACKS.ID • WINTER 2026</div>
 </footer>
 
 <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbykBwYZX2poPZx2-7gxtfnlrg0N5BW29lkdYOKeaelaGapyKi3NHQHUYDMoA1XTGTjO/exec";
 
-    /* ANIMASI DAUN GUGUR (AUTUMN LEAVES) */
+    /* ANIMASI SALJU (SNOWFALL) */
     const canvas = document.getElementById('rainCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let leaves = [];
-    const leafColors = ['#d35400', '#e67e22', '#f1c40f', '#c0392b'];
-
-    for (let i = 0; i < 40; i++) {
-        leaves.push({
+    let particles = [];
+    for (let i = 0; i < 100; i++) {
+        particles.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: Math.random() * 8 + 5,
-            color: leafColors[Math.floor(Math.random() * leafColors.length)],
-            speed: Math.random() * 2 + 1,
-            swing: Math.random() * 2,
-            swingSpeed: Math.random() * 0.05
+            r: Math.random() * 3 + 1,
+            d: Math.random() * 10, // density
+            speed: Math.random() * 1 + 0.5
         });
     }
 
-    function drawLeaves() {
+    function drawSnow() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        leaves.forEach(l => {
-            ctx.fillStyle = l.color;
-            ctx.beginPath();
-            // Gambar bentuk oval sederhana sebagai daun
-            ctx.ellipse(l.x + Math.sin(l.swing) * 20, l.y, l.size, l.size/2, l.swing, 0, Math.PI * 2);
-            ctx.fill();
-            
-            l.y += l.speed;
-            l.swing += l.swingSpeed;
-            
-            if (l.y > canvas.height) {
-                l.y = -20;
-                l.x = Math.random() * canvas.width;
-            }
-        });
-        requestAnimationFrame(drawLeaves);
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        for (let i = 0; i < particles.length; i++) {
+            let p = particles[i];
+            ctx.moveTo(p.x, p.y);
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+        }
+        ctx.fill();
+        updateSnow();
     }
-    drawLeaves();
+
+    function updateSnow() {
+        for (let i = 0; i < particles.length; i++) {
+            let p = particles[i];
+            p.y += p.speed;
+            p.x += Math.sin(p.d) * 0.5;
+
+            if (p.y > canvas.height) {
+                particles[i] = { x: Math.random() * canvas.width, y: -10, r: p.r, d: p.d, speed: p.speed };
+            }
+        }
+        requestAnimationFrame(drawSnow);
+    }
+    drawSnow();
 
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
@@ -403,7 +389,7 @@
         Object.keys(cart).forEach(id => { if(cart[id] > 0) { total += cart[id] * 3; list.push(`${cart[id]}x ${snackData[id].name}`); } });
         if(list.length === 0) return alert("PILIH SNACK DULU!");
         const btn = document.getElementById('submit-btn');
-        btn.innerText = "MENGIRIM..."; btn.disabled = true;
+        btn.innerText = "SENDING..."; btn.disabled = true;
         const params = new URLSearchParams();
         params.append('nama', nama);
         params.append('pesanan', list.join(", "));
