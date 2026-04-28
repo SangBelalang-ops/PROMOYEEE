@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERSNACKS.ID - WINTER EDITION</title>
+    <title>TERSNACKS.ID - RETRO VIBE</title>
     <style>
         :root { 
-            /* TEMA WINTER / SALJU */
-            --primary: #a5f3fc; /* Ice Blue */
-            --glass: rgba(15, 23, 42, 0.85); /* Deep Night Blue */
-            --success: #ffffff; /* Snow White */
-            --danger: #ff4d4d;
-            --gold: #fde047;
-            --snow-glow: rgba(255, 255, 255, 0.4);
+            /* TEMA RETRO SYNTHWAVE */
+            --primary: #ff00ff; /* Neon Pink */
+            --secondary: #00ffff; /* Cyber Blue */
+            --glass: rgba(20, 0, 40, 0.9); /* Deep Purple Space */
+            --success: #39ff14; /* Neon Green */
+            --danger: #ff3131;
+            --gold: #ffea00;
         }
         body { 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; background: #020617; color: white; 
+            font-family: 'Courier New', Courier, monospace; /* Font lebih retro */
+            margin: 0; background: #050010; color: white; 
             text-align: center; padding-bottom: 50px; overflow-x: hidden; 
         }
 
@@ -28,44 +28,40 @@
             height: 100%;
             z-index: 1;
             pointer-events: none;
+            background: linear-gradient(to bottom, #050010 0%, #200040 100%);
         }
 
         header { 
             position: relative; 
             z-index: 10; padding: 45px 10px; 
-            background: var(--glass); border-bottom: 2px solid var(--primary); 
-            box-shadow: 0 0 25px rgba(165, 243, 252, 0.15);
-            backdrop-filter: blur(5px);
+            background: var(--glass); border-bottom: 4px double var(--primary); 
+            box-shadow: 0 5px 20px rgba(255, 0, 255, 0.3);
         }
         
         .logo-header { 
             width: 280px; margin-bottom: 10px; 
-            filter: drop-shadow(0 0 15px var(--primary)); 
+            filter: drop-shadow(0 0 15px var(--primary)) hue-rotate(45deg); 
         }
         
         header p { 
-            margin: 0; font-size: 0.85em; font-weight: 900; 
-            letter-spacing: 2px; color: var(--primary); 
-            position: relative;
-            display: inline-block;
-            background: linear-gradient(90deg, var(--primary), #fff, var(--primary));
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
+            margin: 0; font-size: 0.9em; font-weight: 900; 
+            letter-spacing: 4px; color: var(--secondary); 
+            text-shadow: 2px 2px var(--primary);
+            text-transform: uppercase;
+            animation: blink 1.5s infinite;
         }
 
-        @keyframes shine {
-            to { background-position: 200% center; }
+        @keyframes blink {
+            50% { opacity: 0.5; }
         }
 
         .kentang-left, .kentang-right {
             position: absolute;
-            bottom: 0;      
+            bottom: -10px;      
             width: 130px; 
             z-index: 11;
             pointer-events: none;
-            filter: drop-shadow(0 0 10px var(--primary));
+            filter: drop-shadow(0 0 10px var(--secondary));
         }
         .kentang-left { left: 10px; }
         .kentang-right { right: 10px; }
@@ -73,8 +69,8 @@
         .grid { 
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
-            gap: 12px; 
-            padding: 15px; 
+            gap: 15px; 
+            padding: 20px; 
             max-width: 1000px; 
             margin: 0 auto; 
             position: relative; 
@@ -82,97 +78,99 @@
         }
         
         .card { 
-            background: var(--glass); border-radius: 15px; overflow: hidden; 
-            border: 1px solid rgba(165, 243, 252, 0.2); position: relative; 
+            background: rgba(255, 255, 255, 0.05); border-radius: 5px; overflow: hidden; 
+            border: 2px solid var(--secondary); position: relative; 
             transition: 0.3s;
         }
-        .card:hover { border-color: var(--primary); }
-        .card img { width: 100%; height: 130px; object-fit: cover; }
+        .card:hover { 
+            transform: scale(1.05) rotate(1deg); 
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+        }
+        .card img { width: 100%; height: 130px; object-fit: cover; filter: saturate(1.5); }
         
         .sold-out-overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 130px; 
-            background: rgba(0,0,0,0.8); display: none; align-items: center; 
+            background: rgba(0,0,0,0.85); display: none; align-items: center; 
             justify-content: center; z-index: 5;
         }
         .is-empty .sold-out-overlay { display: flex; }
 
         .so-text { 
-            color: white; background: var(--danger); padding: 5px 15px; 
-            font-weight: 900; transform: rotate(-15deg); 
+            color: #fff; background: var(--danger); padding: 5px 15px; 
+            font-weight: 900; transform: rotate(-10deg); 
             border: 2px solid white; font-size: 0.8em; 
+            box-shadow: 0 0 10px var(--danger);
         }
 
-        .card-info { padding: 10px; }
+        .card-info { padding: 10px; border-top: 1px solid var(--secondary); }
         .card-name { 
-            font-size: 0.75em; font-weight: 800; color: var(--primary); 
+            font-size: 0.7em; font-weight: 900; color: var(--secondary); 
             height: 35px; display: flex; align-items: center; 
             justify-content: center; text-transform: uppercase; 
         }
         
         .stock-tag { 
-            font-size: 0.65em; color: #fff; 
-            background: rgba(165, 243, 252, 0.2); border-radius: 5px; 
+            font-size: 0.6em; color: #000; 
+            background: var(--secondary); border-radius: 3px; 
             padding: 2px 8px; display: inline-block; 
             margin-bottom: 10px; font-weight: 900;
         }
 
         .counter { display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-qty { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--primary); 
-            width: 30px; height: 30px; border-radius: 8px; color: white; cursor: pointer; 
+            background: var(--primary); border: none; 
+            width: 30px; height: 30px; border-radius: 0; color: white; cursor: pointer; 
+            font-weight: bold; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
         
-        .btn-qty:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-qty:disabled { background: #444; cursor: not-allowed; clip-path: none; }
 
         #total-bar { 
             position: fixed; bottom: 0; left: 0; right: 0; 
-            background: rgba(15, 23, 42, 0.95); padding: 18px 25px; display: none; 
+            background: #000; padding: 18px 25px; display: none; 
             justify-content: space-between; align-items: center; 
-            border-top: 2px solid var(--primary); z-index: 1000; 
-            backdrop-filter: blur(15px); 
+            border-top: 4px solid var(--primary); z-index: 1000; 
         }
         .btn-order { 
-            background: var(--primary); color: #020617; border: none; 
-            padding: 12px 25px; border-radius: 12px; font-weight: 900; cursor: pointer; 
+            background: var(--secondary); color: #000; border: none; 
+            padding: 12px 25px; border-radius: 0; font-weight: 900; cursor: pointer;
+            box-shadow: 4px 4px 0 var(--primary);
         }
 
         #payment-area { 
             position: relative; z-index: 10; display:none; padding: 40px 20px; 
-            background: #020617; border-top: 2px solid var(--primary); 
+            background: #050010; border-top: 4px double var(--secondary); 
         }
         .input-nama { 
-            width: 85%; padding: 15px; border-radius: 12px; 
-            border: 1px solid var(--primary); background: transparent; 
-            color: white; margin-bottom: 25px; text-align: center; font-weight: 800; 
+            width: 85%; padding: 15px; border-radius: 0; 
+            border: 2px solid var(--primary); background: #000; 
+            color: var(--secondary); margin-bottom: 25px; text-align: center; font-weight: 800; 
         }
         
         .pay-options { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
         .opt-btn { 
-            background: transparent; border: 2px solid var(--primary); color: white; 
-            padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 900; 
+            background: transparent; border: 2px solid var(--secondary); color: var(--secondary); 
+            padding: 12px 25px; border-radius: 0; cursor: pointer; font-weight: 900; 
         }
-        .opt-btn.active { background: var(--primary); color: #020617; }
-
-        .qr-display { display: none; justify-content: center; margin-bottom: 30px; }
-        .qr-box { background: white; padding: 12px; border-radius: 15px; width: 200px; }
-        .qr-box img { width: 100%; border-radius: 5px; }
-        .qr-label { color: black; font-size: 0.8em; font-weight: 900; margin-top: 8px; }
+        .opt-btn.active { background: var(--secondary); color: #000; }
 
         .final-btn { 
-            background: var(--success); color: #020617; padding: 18px; 
-            border: none; border-radius: 50px; font-weight: 900; 
-            width: 90%; cursor: pointer; box-shadow: 0 0 15px white;
+            background: var(--primary); color: #fff; padding: 18px; 
+            border: none; border-radius: 0; font-weight: 900; 
+            width: 90%; cursor: pointer; text-transform: uppercase;
+            box-shadow: 6px 6px 0 var(--secondary);
         }
 
         footer { 
             position: relative; z-index: 10; margin-top: 60px; 
-            padding: 50px 20px; border-top: 1px solid rgba(165, 243, 252, 0.2); 
-            background: rgba(15, 23, 42, 0.6); 
+            padding: 50px 20px; border-top: 1px solid var(--primary); 
+            background: #000; 
         }
 
         @media (max-width: 600px) { 
             .grid { grid-template-columns: repeat(2, 1fr); } 
-            .kentang-left, .kentang-right { width: 90px; bottom: -15px; } 
+            .kentang-left, .kentang-right { width: 80px; } 
         }
     </style>
 </head>
@@ -182,29 +180,29 @@
 
 <header>
     <img src="https://i.postimg.cc/T3Dj51gC/download.png" class="logo-header">
-    <h2 style="margin:0; font-size: 1.4em; font-weight: 900;">TERSNACKS.ID</h2>
-    <p>WINTER SPECIAL • $3.00</p>
+    <h2 style="margin:0; font-size: 1.6em; font-weight: 900; color: var(--secondary); text-shadow: 3px 3px var(--primary);">TERSNACKS.ID</h2>
+    <p>INSERT COIN TO START • $3.00</p>
     
-    <img src="https://i.postimg.cc/wMKm57LB/output-onlinegiftools.gif" class="kentang-left" alt="Kentang Payung Kiri">
-    <img src="https://i.postimg.cc/T1rdWcrD/output-onlinegiftools-(1).gif" class="kentang-right" alt="Kentang Outline Kanan">
+    <img src="https://i.postimg.cc/wMKm57LB/output-onlinegiftools.gif" class="kentang-left" alt="Kentang">
+    <img src="https://i.postimg.cc/T1rdWcrD/output-onlinegiftools-(1).gif" class="kentang-right" alt="Kentang">
 </header>
 
-<div id="loading" style="padding: 50px; color: var(--primary); font-weight: 800;">FROSTING DATA...</div>
+<div id="loading" style="padding: 50px; color: var(--primary); font-weight: 800; letter-spacing: 5px;">LOADING SYSTEM...</div>
 <div class="grid" id="container-snack"></div>
 
 <div id="total-bar">
     <div style="text-align:left">
-        <div id="summary" style="font-size: 0.65em; color: #cbd5e1;"></div>
+        <div id="summary" style="font-size: 0.65em; color: var(--secondary); text-transform: uppercase;"></div>
         <div id="display-total" style="font-weight: 900; color: var(--primary); font-size: 1.4em;">$0.00</div>
     </div>
-    <button class="btn-order" onclick="openPayment()">ORDER SEKARANG</button>
+    <button class="btn-order" onclick="openPayment()">ORDER NOW</button>
 </div>
 
 <div id="payment-area">
-    <h3 style="color: var(--primary); font-weight: 900;">DATA PEMBELI</h3>
-    <input type="text" id="nama-pembeli" class="input-nama" placeholder="SIAPA NAMA ANDA?">
+    <h3 style="color: var(--secondary); font-weight: 900;">PLAYER NAME</h3>
+    <input type="text" id="nama-pembeli" class="input-nama" placeholder="ENTER YOUR NAME">
     
-    <p style="font-size: 0.8em; font-weight: 800; margin-bottom: 15px;">PILIH METODE PEMBAYARAN:</p>
+    <p style="font-size: 0.8em; font-weight: 800; margin-bottom: 15px; color: var(--primary);">SELECT PAYMENT:</p>
     <div class="pay-options">
         <button class="opt-btn" id="btn-riel" onclick="showQR('riel')">RIEL</button>
         <button class="opt-btn" id="btn-usd" onclick="showQR('usd')">USD</button>
@@ -224,61 +222,64 @@
         </div>
     </div>
 
-    <button id="submit-btn" onclick="sendToSpreadsheet()" class="final-btn">KONFIRMASI & KIRIM</button>
+    <button id="submit-btn" onclick="sendToSpreadsheet()" class="final-btn">CONFIRM & START</button>
 </div>
 
 <footer>
-    <h3 style="color: var(--primary); letter-spacing: 2px; margin-bottom: 10px; font-weight: 900; font-size: 1.1em;">STAY WARM & ENJOY!</h3>
-    <div style="color: #fff; font-size: 0.9em; font-weight: 700; opacity: 0.8;">TERIMA KASIH SUDAH BERBELANJA DI TERSNACKS.ID</div>
-    <div style="margin-top: 25px; opacity: 0.3; font-size: 0.6em; letter-spacing: 5px; font-weight: 900;">TERSNACKS.ID • WINTER 2026</div>
+    <h3 style="color: var(--secondary); letter-spacing: 5px; margin-bottom: 10px; font-weight: 900; font-size: 1.1em;">GAME OVER? SHOP AGAIN!</h3>
+    <div style="color: var(--primary); font-size: 0.8em; font-weight: 700;">THANKS FOR PLAYING AT TERSNACKS.ID</div>
+    <div style="margin-top: 25px; opacity: 0.5; font-size: 0.6em; letter-spacing: 5px;">EST. 198X • 2026</div>
 </footer>
 
 <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbykBwYZX2poPZx2-7gxtfnlrg0N5BW29lkdYOKeaelaGapyKi3NHQHUYDMoA1XTGTjO/exec";
 
-    /* ANIMASI SALJU (SNOWFALL) */
+    /* ANIMASI RETRO SPACE (STARS) */
     const canvas = document.getElementById('rainCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let particles = [];
-    for (let i = 0; i < 100; i++) {
-        particles.push({
+    let stars = [];
+    for (let i = 0; i < 150; i++) {
+        stars.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            r: Math.random() * 3 + 1,
-            d: Math.random() * 10, // density
-            speed: Math.random() * 1 + 0.5
+            size: Math.random() * 2,
+            speed: Math.random() * 3 + 1
         });
     }
 
-    function drawSnow() {
+    function drawRetro() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
-        ctx.beginPath();
-        for (let i = 0; i < particles.length; i++) {
-            let p = particles[i];
-            ctx.moveTo(p.x, p.y);
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
-        }
-        ctx.fill();
-        updateSnow();
-    }
+        
+        // Draw Stars
+        ctx.fillStyle = "#fff";
+        stars.forEach(s => {
+            ctx.fillRect(s.x, s.y, s.size, s.size);
+            s.y += s.speed;
+            if (s.y > canvas.height) s.y = 0;
+        });
 
-    function updateSnow() {
-        for (let i = 0; i < particles.length; i++) {
-            let p = particles[i];
-            p.y += p.speed;
-            p.x += Math.sin(p.d) * 0.5;
-
-            if (p.y > canvas.height) {
-                particles[i] = { x: Math.random() * canvas.width, y: -10, r: p.r, d: p.d, speed: p.speed };
-            }
+        // Draw Retro Grid di bagian bawah
+        ctx.strokeStyle = "rgba(0, 255, 255, 0.2)";
+        ctx.lineWidth = 1;
+        for(let i = 0; i < canvas.width; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, canvas.height);
+            ctx.stroke();
         }
-        requestAnimationFrame(drawSnow);
+        for(let i = 0; i < canvas.height; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(canvas.width, i);
+            ctx.stroke();
+        }
+
+        requestAnimationFrame(drawRetro);
     }
-    drawSnow();
+    drawRetro();
 
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
@@ -326,12 +327,12 @@
             grid.innerHTML += `
                 <div class="card ${soldOut ? 'is-empty' : ''}">
                     <div class="sold-out-overlay">
-                        <div class="so-text">SOLD OUT</div>
+                        <div class="so-text">GAME OVER</div>
                     </div>
                     <img src="${s.img}">
                     <div class="card-info">
                         <div class="card-name">${s.name}</div>
-                        <div class="stock-tag">SISA: ${s.stock}</div>
+                        <div class="stock-tag">STK: ${s.stock}</div>
                         <div class="counter">
                             <button class="btn-qty" onclick="changeQty(${s.id},-1)" ${soldOut ? 'disabled' : ''}>-</button>
                             <span id="qty-${s.id}" style="font-weight:900; min-width:20px;">0</span>
@@ -384,18 +385,18 @@
 
     function sendToSpreadsheet() {
         const nama = document.getElementById('nama-pembeli').value;
-        if(!nama) return alert("NAMA HARUS DIISI!");
+        if(!nama) return alert("ENTER PLAYER NAME!");
         let list = []; let total = 0;
         Object.keys(cart).forEach(id => { if(cart[id] > 0) { total += cart[id] * 3; list.push(`${cart[id]}x ${snackData[id].name}`); } });
-        if(list.length === 0) return alert("PILIH SNACK DULU!");
+        if(list.length === 0) return alert("SELECT YOUR SNACK!");
         const btn = document.getElementById('submit-btn');
-        btn.innerText = "SENDING..."; btn.disabled = true;
+        btn.innerText = "UPLOADING..."; btn.disabled = true;
         const params = new URLSearchParams();
         params.append('nama', nama);
         params.append('pesanan', list.join(", "));
         params.append('total', "$" + total.toFixed(2));
         fetch(`${scriptURL}?${params.toString()}`, { method: 'GET', mode: 'no-cors' })
-        .then(() => { alert("ORDER SENT!"); location.reload(); })
+        .then(() => { alert("ORDER SENT! LEVEL COMPLETE."); location.reload(); })
         .catch(() => { location.reload(); });
     }
     init();
